@@ -165,10 +165,10 @@ class GUI():
         """Method to get the user input to search in the database.
         """
 
-        self.__user_preferences()
+        __user_preferences = self.__user_preferences()
 
         # Call Database class.
-        __database = Database()
+        self.__database = Database(__user_preferences)
 
     def __create_labels(self):
         """Method to create the labels.

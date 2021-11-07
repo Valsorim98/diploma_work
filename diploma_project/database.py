@@ -4,8 +4,6 @@
 from pymongo import MongoClient
 import certifi
 
-# from gui import GUI
-
 class Database():
     """Class database.
     """
@@ -20,9 +18,11 @@ class Database():
 
 # Region constructor.
 
-    def __init__(self):
+    def __init__(self, user_preferences):
         """Constructor for database class.
         """
+
+        self.__user_preferences = user_preferences
 
         self.__get_documents()
 
@@ -61,8 +61,5 @@ class Database():
         # Iterate through all documents and print them.
         # for document in read_collection:
             # print(document)
-
-        # Get the dictionary with the user preferences to search in the database.
-        # GUI.__user_preferences()
 
 # End region.
