@@ -103,7 +103,7 @@ class GUI():
 # Region constructor.
 
     def __init__(self):
-        """Constructor for View class.
+        """Constructor for GUI class.
         """
 
         self.__create_form()
@@ -135,6 +135,8 @@ class GUI():
 # Region private methods.
 
     def __create_form(self):
+        """Method to create the GUI form.
+        """
 
         # Create the window for GUI.
         self.__root = tk.Tk()
@@ -160,7 +162,7 @@ class GUI():
         self.__root.configure(bg="#A37CF7")
 
     def __searchdb_command(self):
-        """Command to get the input from the entries and search in the database.
+        """Method to get the user input to search in the database.
         """
 
         self.__user_preferences()
@@ -287,8 +289,11 @@ class GUI():
         __price_input = self.__price_combobox.get()
 
         # Append the dict with the entries.
-        __searchdb_dict["Town"] = __city_input
-        __searchdb_dict["Star Rating"] = __stars_input
+        if __city_input != "":
+            __searchdb_dict["Town"] = __city_input
+
+        if __stars_input != "":
+            __searchdb_dict["Star Rating"] = __stars_input
 
         # Check if the checkboxes are checked.
         if self.__wi_fi_var.get() == True:
@@ -306,11 +311,12 @@ class GUI():
         if self.__pets_var.get() == True:
             __searchdb_dict["Amenities"]["Allow Pets"] = True
 
-        __searchdb_dict["Price"] = __price_input
+        if __price_input != "":
+            __searchdb_dict["Price"] = __price_input
 
         # for testing
         print(__searchdb_dict)
 
-        # return __searchdb_dict
+        return __searchdb_dict
 
 # End region private methods.
