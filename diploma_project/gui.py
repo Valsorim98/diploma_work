@@ -278,6 +278,9 @@ class GUI():
 
     def __user_preferences(self):
         """Method to get the user preferences and store them in a dictionary.
+
+        Returns:
+            dict: The user preferences.
         """
 
         # Create a default dict.
