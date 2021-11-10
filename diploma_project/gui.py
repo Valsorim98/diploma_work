@@ -288,7 +288,11 @@ class GUI():
 
         # Get the inputs.
         __city_input = self.__city_combobox.get()
+        # Lowercase the string and capitalize only the first letter of every word.
+        __city_input = __city_input.lower().title()
+
         __stars_input = self.__stars_combobox.get()
+
         __price_input = self.__price_combobox.get()
 
         # Append the dict with the entries.
