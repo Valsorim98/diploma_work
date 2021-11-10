@@ -57,9 +57,16 @@ class Database():
 
         # Get all the documents from the collection.
         read_collection = collection.find({})
-        
+
+        # Prints all hotels in the town from user preferences.
+        for hotel in read_collection:
+            db_town_hotel = hotel["Town"]
+
+            if self.__user_preferences["Town"] == db_town_hotel:
+                print(hotel)
+
         # Iterate through all documents and print them.
         # for document in read_collection:
-            # print(document)
+        #     print(document)
 
 # End region.
