@@ -60,9 +60,33 @@ class Database():
 
         # Prints all hotels in the town from user preferences.
         for hotel in read_collection:
-            db_town_hotel = hotel["Town"]
 
-            if self.__user_preferences["Town"] == db_town_hotel:
+            # Get the data for each hotel from the database.
+            db_town_hotel = hotel["Town"]
+            db_stars_hotel = hotel["Star Rating"]
+
+            # Create a dict for each hotels' amenities and append it.
+            db_amenities_hotel = {"Wi-fi": 0, "Air Conditioner": 0, "Bar": 0, "Restaurant": 0, "Allow Pets": 0}
+
+            db_wifi_hotel = hotel["Wi-fi"]
+            db_amenities_hotel["Wi-fi"] = db_wifi_hotel
+
+            db_ac_hotel = hotel["Air Conditioner"]
+            db_amenities_hotel["Air Conditioner"] = db_ac_hotel
+
+            db_bar_hotel = hotel["Bar"]
+            db_amenities_hotel["Bar"] = db_bar_hotel
+
+            db_restaurant_hotel = hotel["Restaurant"]
+            db_amenities_hotel["Restaurant"] = db_restaurant_hotel
+
+            db_pets_hotel = hotel["Allow Pets"]
+            db_amenities_hotel["Allow Pets"] = db_pets_hotel
+
+            # Prints out each hotel's amenities.
+            # print(db_amenities_hotel)
+
+            if self.__user_preferences["Town"] == db_town_hotel and self.__user_preferences["Star Rating"] == db_stars_hotel:
                 print(hotel)
 
         # Iterate through all documents and print them.
