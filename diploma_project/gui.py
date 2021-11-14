@@ -300,6 +300,7 @@ class GUI():
             __searchdb_dict["Town"] = __city_input
 
         if __stars_input != "":
+            __stars_input = int(__stars_input)
             __searchdb_dict["Star Rating"] = __stars_input
 
         # Check if the checkboxes are checked.
