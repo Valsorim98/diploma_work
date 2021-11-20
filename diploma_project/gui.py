@@ -159,7 +159,7 @@ class GUI():
         self.__root.geometry("{}x{}+{}+{}".format(root_width, root_height, x_cordinate, y_cordinate))
 
         # Set window background colour.
-        self.__root.configure(bg="#A37CF7")
+        self.__root.configure(bg="#1C86EE")
 
     def __searchdb_command(self):
         """Method to get the user input to search in the database.
@@ -174,19 +174,19 @@ class GUI():
         """Method to create the labels.
         """
 
-        self.__main_label = tk.Label(text="Looking for a hotel?\nYou are at the right place!", fg="white", bg="#A37CF7")
+        self.__main_label = tk.Label(text="Looking for a hotel?\nYou are at the right place!", fg="white", bg="#1C86EE")
         self.__main_label.config(font=("Courier", 12))
 
-        self.__city_label = tk.Label(self.__root, text="City:", fg="white", bg="#A37CF7")
+        self.__city_label = tk.Label(self.__root, text="City:", fg="white", bg="#1C86EE")
         self.__city_label.config(font=("Courier", 10))
 
-        self.__stars_label = tk.Label(self.__root, text="Stars:", fg="white", bg="#A37CF7")
+        self.__stars_label = tk.Label(self.__root, text="Stars:", fg="white", bg="#1C86EE")
         self.__stars_label.config(font=("Courier", 10))
 
-        self.__amenities_label = tk.Label(self.__root, text="Amenities:", fg="white", bg="#A37CF7")
+        self.__amenities_label = tk.Label(self.__root, text="Amenities:", fg="white", bg="#1C86EE")
         self.__amenities_label.config(font=("Courier", 10))
 
-        self.__price_label = tk.Label(self.__root, text="Price:", fg="white", bg="#A37CF7")
+        self.__price_label = tk.Label(self.__root, text="Price:", fg="white", bg="#1C86EE")
         self.__price_label.config(font=("Courier", 10))
 
     def __create_comboboxes(self):
@@ -208,19 +208,19 @@ class GUI():
         """
 
         self.__wi_fi_var = BooleanVar()
-        self.__wi_fi_checkbox = Checkbutton(self.__root, text="Wi-fi", bg="#A37CF7", variable=self.__wi_fi_var)
+        self.__wi_fi_checkbox = Checkbutton(self.__root, text="Wi-fi", bg="#1C86EE", variable=self.__wi_fi_var)
 
         self.__ac_var = BooleanVar()
-        self.__ac_checkbox = Checkbutton(self.__root, text="Air Conditioner", bg="#A37CF7", variable=self.__ac_var)
+        self.__ac_checkbox = Checkbutton(self.__root, text="Air Conditioner", bg="#1C86EE", variable=self.__ac_var)
 
         self.__bar_var = BooleanVar()
-        self.__bar_checkbox = Checkbutton(self.__root, text="Bar", bg="#A37CF7", variable=self.__bar_var)
+        self.__bar_checkbox = Checkbutton(self.__root, text="Bar", bg="#1C86EE", variable=self.__bar_var)
 
         self.__restaurant_var = BooleanVar()
-        self.__restaurant_checkbox = Checkbutton(self.__root, text="Restaurant", bg="#A37CF7", variable=self.__restaurant_var)
+        self.__restaurant_checkbox = Checkbutton(self.__root, text="Restaurant", bg="#1C86EE", variable=self.__restaurant_var)
 
         self.__pets_var = BooleanVar()
-        self.__pets_checkbox = Checkbutton(self.__root, text="Allow Pets", bg="#A37CF7", variable=self.__pets_var)
+        self.__pets_checkbox = Checkbutton(self.__root, text="Allow Pets", bg="#1C86EE", variable=self.__pets_var)
 
     def __create_button(self):
         """Method to create the button.
@@ -228,10 +228,11 @@ class GUI():
 
         self.__search_btn = tk.Button(
             text="Search",
+            font="Helvetica 9 bold",
             width=15,
             height=2,
-            fg="white",
-            bg="#6DA536",
+            fg="black",
+            bg="#F0FFFF",
             command=self.__searchdb_command)
 
     def __positioning(self):
