@@ -58,95 +58,129 @@ class Database():
         # Get all the documents from the collection.
         read_collection = collection.find({})
 
+        # Flag for a suitable hotel.
+        suitable_hotel = False
+
+        # Hotel counter.
+        num_hotels = 0
+
         # Prints all hotels in the town from user preferences.
         for hotel in read_collection:
 
-            # Get the data for each hotel from the database.
-            db_town_hotel = hotel["Town"]
-            db_stars_hotel = hotel["Star Rating"]
-            db_price_hotel = hotel["Price"]
-
-            # Create a dict for each hotels' amenities and append it.
-            db_amenities_hotel = {"Wi-fi": 0, "Air Conditioner": 0, "Bar": 0, "Restaurant": 0, "Allow Pets": 0}
-
-            db_wifi_hotel = hotel["Wi-fi"]
-            db_amenities_hotel["Wi-fi"] = db_wifi_hotel
-
-            db_ac_hotel = hotel["Air Conditioner"]
-            db_amenities_hotel["Air Conditioner"] = db_ac_hotel
-
-            db_bar_hotel = hotel["Bar"]
-            db_amenities_hotel["Bar"] = db_bar_hotel
-
-            db_restaurant_hotel = hotel["Restaurant"]
-            db_amenities_hotel["Restaurant"] = db_restaurant_hotel
-
-            db_pets_hotel = hotel["Allow Pets"]
-            db_amenities_hotel["Allow Pets"] = db_pets_hotel
-
-            # Prints out each hotel's amenities.
-            # print(db_amenities_hotel)
-
-            # Create flags for every preference and search the db only for True flags.
-            town_flag = False
-            rating_flag = False
-            wifi_flag = False
-            ac_flag = False
-            bar_flag = False
-            restaurant_flag = False
-            pets_flag = False
-            price_flag = False
+            # Create dict with the given preferences to search in the database.
+            __searchdb = {}
 
             # If the user didn't specify any preferences print all hotels.
             if self.__user_preferences["Town"] == 0 and self.__user_preferences["Star Rating"] == 0 and self.__user_preferences["Amenities"]["Wi-fi"] == 0 and self.__user_preferences["Amenities"]["Air Conditioner"] == 0 and self.__user_preferences["Amenities"]["Bar"] == 0 and self.__user_preferences["Amenities"]["Restaurant"] == 0 and self.__user_preferences["Amenities"]["Allow Pets"] == 0 and self.__user_preferences["Price"] == 0:
                 print(hotel)
+                num_hotels += 1
 
             # If there are any given preferences to search with them.
             else:
 
                 # Search by town.
-                if self.__user_preferences["Town"] == db_town_hotel:
-                    town_flag = True
-                    # print(hotel)
-
-                elif self.__user_preferences["Town"] == 0:
-                    pass
+                if self.__user_preferences["Town"] != 0:
+                    __searchdb["Town"] = self.__user_preferences["Town"]
 
                 # Search by star rating.
-                if self.__user_preferences["Star Rating"] == db_stars_hotel:
-                    rating_flag = True
+                if self.__user_preferences["Star Rating"] != 0:
+                    __searchdb["Star Rating"] = self.__user_preferences["Star Rating"]
 
-                elif self.__user_preferences["Star Rating"] == 0:
-                    pass
+                # Search by wi-fi.
+                if self.__user_preferences["Amenities"]["Wi-fi"] != 0:
+                    __searchdb["Wi-fi"] = True
 
-                # Search by amenities.
-                if self.__user_preferences["Amenities"]["Wi-fi"] == 0:
-                    pass
+                # Search by air conditioner.
+                if self.__user_preferences["Amenities"]["Air Conditioner"] != 0:
+                    __searchdb["Air Conditioner"] = True
 
-                elif self.__user_preferences["Amenities"]["Wi-fi"] == True:
-                    pass
+                # Search by bar.
+                if self.__user_preferences["Amenities"]["Bar"] != 0:
+                    __searchdb["Bar"] = True
 
-                if self.__user_preferences["Amenities"]["Air Conditioner"] == 0:
-                    pass
+                # Search by restaurant.
+                if self.__user_preferences["Amenities"]["Restaurant"] != 0:
+                    __searchdb["Restaurant"] = True
 
-                if self.__user_preferences["Amenities"]["Bar"] == 0:
-                    pass
-
-                if self.__user_preferences["Amenities"]["Restaurant"] == 0:
-                    pass
-
-                if self.__user_preferences["Amenities"]["Allow Pets"] == 0:
-                    pass
-
-                elif self.__user_preferences["Amenities"] == db_amenities_hotel:
-                    pass
+                # Search by pets.
+                if self.__user_preferences["Amenities"]["Allow Pets"] != 0:
+                    __searchdb["Allow Pets"] = True
 
                 # Search by price.
-                if self.__user_preferences["Price"] == 0:
-                    pass
+                if self.__user_preferences["Price"] != 0:
+                    __searchdb["Price"] = self.__user_preferences["Price"]
 
-                elif self.__user_preferences["Price"] == db_price_hotel:
-                    pass
+            # Iterate on every key - value pair from __searchdb dict.
+            for key, value in __searchdb.items():
+
+                if (key, value) in hotel.items():
+                    suitable_hotel = True
+
+                elif key == "Price":
+
+                    if value == "Up to 30 BGN":
+                        if hotel["Price"] <= 30:
+                            suitable_hotel = True
+
+                        else:
+                            suitable_hotel = False
+                            break
+
+                    elif value == "31-50 BGN":
+                        if hotel["Price"] >= 31 and hotel["Price"] <= 50:
+                            suitable_hotel = True
+
+                        else:
+                            suitable_hotel = False
+                            break
+
+                    elif value == "51-70 BGN":
+                        if hotel["Price"] >= 51 and hotel["Price"] <= 70:
+                            suitable_hotel = True
+
+                        else:
+                            suitable_hotel = False
+                            break
+
+                    elif value == "71-100 BGN":
+                        if hotel["Price"] >= 71 and hotel["Price"] <= 100:
+                            suitable_hotel = True
+
+                        else:
+                            suitable_hotel = False
+                            break
+
+                    elif value == "More than 100 BGN":
+                        if hotel["Price"] > 100:
+                            suitable_hotel = True
+
+                        else:
+                            suitable_hotel = False
+                            break
+
+                    # If the input price is different from the options in the dropdown menu, to look for hotels up to the given price.
+                    else:
+                        # Convert string to int.
+                        hotel_price = int(__searchdb["Price"])
+
+                        if hotel["Price"] <= hotel_price:
+                            suitable_hotel = True
+
+                        else:
+                            suitable_hotel = False
+
+                else:
+                    suitable_hotel = False
+                    break
+
+            # Print only the hotels that coincide with all the user preferences.
+            if suitable_hotel == True:
+                print(hotel)
+                num_hotels += 1
+
+        # For testing.
+        print(__searchdb)
+        print(f"{num_hotels} hotels found.")
 
         # Iterate through all documents and print them.
         # for document in read_collection:
