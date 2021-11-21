@@ -169,6 +169,8 @@ class GUI():
 
         # Call Database class.
         self.__database = Database(__user_preferences)
+        found_hotels = self.__database.suitable_hotels
+        print(f"\nIn GUI {found_hotels}")
 
     def __create_labels(self):
         """Method to create the labels.

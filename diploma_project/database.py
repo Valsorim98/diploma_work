@@ -14,6 +14,10 @@ class Database():
     """Connect as a client.
     """
 
+    suitable_hotels = None
+    """The found hotels.
+    """
+
 # End region.
 
 # Region constructor.
@@ -63,6 +67,9 @@ class Database():
 
         # Hotel counter.
         num_hotels = 0
+
+        # Dict for found hotels.
+        found_hotels = {}
 
         # Prints all hotels in the town from user preferences.
         for hotel in read_collection:
@@ -173,17 +180,18 @@ class Database():
                     suitable_hotel = False
                     break
 
-            # Print only the hotels that coincide with all the user preferences.
+            # Print only the hotels that coincide with all the user preferences and append them to found_hotels dict.
             if suitable_hotel == True:
                 print(hotel)
                 num_hotels += 1
+                found_hotels.update({num_hotels:hotel})
 
         # For testing.
         print(__searchdb)
         print(f"{num_hotels} hotels found.")
+        print(f"\nFound hotels: {found_hotels}")
 
-        # Iterate through all documents and print them.
-        # for document in read_collection:
-        #     print(document)
+        # Make found_hotels dict as a class attribute to be able to get it outside of the class.
+        self.suitable_hotels = found_hotels
 
 # End region.
