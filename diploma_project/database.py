@@ -187,8 +187,15 @@ class Database():
                 found_hotels.update({num_hotels:hotel})
 
         # For testing.
-        print(__searchdb)
+        print(f"\nSearch with: {__searchdb}")
         print(f"{num_hotels} hotels found.")
+
+        # Delete every _id key from the dict.
+        for hotel in found_hotels.values():
+            if "_id" in hotel.keys():
+                hotel.pop("_id")
+
+        # for testing
         print(f"\nFound hotels: {found_hotels}")
 
         # Make found_hotels dict as a class attribute to be able to get it outside of the class.
