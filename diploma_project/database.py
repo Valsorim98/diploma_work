@@ -78,12 +78,25 @@ class Database():
             __searchdb = {}
 
             # If the user didn't specify any preferences print all hotels.
-            if self.__user_preferences["Town"] == 0 and self.__user_preferences["Star Rating"] == 0 and self.__user_preferences["Amenities"]["Wi-fi"] == 0 and self.__user_preferences["Amenities"]["Air Conditioner"] == 0 and self.__user_preferences["Amenities"]["Bar"] == 0 and self.__user_preferences["Amenities"]["Restaurant"] == 0 and self.__user_preferences["Amenities"]["Allow Pets"] == 0 and self.__user_preferences["Price"] == 0:
+            if (self.__user_preferences["Name"] == 0 and
+                self.__user_preferences["Town"] == 0 and
+                self.__user_preferences["Star Rating"] == 0 and
+                self.__user_preferences["Amenities"]["Wi-fi"] == 0 and
+                self.__user_preferences["Amenities"]["Air Conditioner"] == 0 and
+                self.__user_preferences["Amenities"]["Bar"] == 0 and
+                self.__user_preferences["Amenities"]["Restaurant"] == 0 and
+                self.__user_preferences["Amenities"]["Allow Pets"] == 0 and
+                self.__user_preferences["Price"] == 0):
+
                 print(hotel)
                 num_hotels += 1
 
             # If there are any given preferences to search with them.
             else:
+
+                # Search by name.
+                if self.__user_preferences["Name"] != 0:
+                    __searchdb["Hotel"] = self.__user_preferences["Name"]
 
                 # Search by town.
                 if self.__user_preferences["Town"] != 0:
