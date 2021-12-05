@@ -27,6 +27,10 @@ class GUI():
     """Main label.
     """
 
+    __name_label = None
+    """Name label.
+    """
+
     __city_label = None
     """City label.
     """
@@ -41,6 +45,10 @@ class GUI():
 
     __price_label = None
     """Price label.
+    """
+
+    __name_entry = None
+    """Name entry.
     """
 
     __city_combobox = None
@@ -111,7 +119,7 @@ class GUI():
 
         self.__main_labels()
 
-        self.__main_comboboxes()
+        self.__main_entry_comboboxes()
 
         self.__main_checkboxes()
 
@@ -183,15 +191,6 @@ class GUI():
 
         _root_results.configure(bg="#1C86EE")
 
-
-
-        # ME and INDIAN:
-
-        # Create frame on the root window.
-        # dont need that
-        # _frame=Frame(_root_results, bg="#1C86EE")
-        # _frame.pack(fill=BOTH, expand="yes")
-
         # Create canvas on the frame.
         _canvas = Canvas(_root_results, bg="#1C86EE", bd=0, highlightthickness=0, relief='ridge')
         _canvas.pack(side=LEFT, expand=True, fill=BOTH)
@@ -200,20 +199,26 @@ class GUI():
         _scrollbar = Scrollbar(_root_results, orient="vertical", command=_canvas.yview)
         _scrollbar.pack(side=RIGHT, fill=Y)
 
-        # Create label on the canvas.
-        # _main_label = Label(_canvas, text="Results", fg="white", bg="#1C86EE", font=("arial", 20), pady=20)
-        # _main_label.pack()
-
         # Make the canvas scrollable.
         _canvas.config(yscrollcommand=_scrollbar.set)
         _canvas.bind('<Configure>', lambda e: _canvas.configure(scrollregion=_canvas.bbox("all")))
 
         # Create a frame on the canvas.
-        frame_in_canvas = Frame(_canvas, bg="#1C86EE", pady=30)
+        _frame_in_canvas = Frame(_canvas, bg="#1C86EE", pady=30)
 
         # Populate the frame on the canvas with the text boxes.
         # Coords start with (x, y).
-        _canvas.create_window((240,0), window=frame_in_canvas, anchor="nw")
+        _canvas.create_window((0,0), window=_frame_in_canvas, anchor="nw", width=750)
+
+        # Configure the grid.
+        _frame_in_canvas.columnconfigure(0, weight=1)
+        _frame_in_canvas.columnconfigure(1, weight=2)
+        _frame_in_canvas.columnconfigure(2, weight=1)
+
+        _main_label = Label(_frame_in_canvas, text="Results", fg="white", bg="#1C86EE", font=("arial", 20))
+        _main_label.grid(row=0, column=1, padx=112, pady=(0,20), sticky=E)
+
+        row_counter = 1
 
         # Create a text box for every found hotel.
         for hotel in _found_hotels.values():
@@ -274,17 +279,60 @@ class GUI():
                 pets_msg = "\nAllow pets: No"
                 message = message + pets_msg
 
-            text_box = Text(frame_in_canvas, height=11, width=32, font=("Courier", 10, "italic"))
-            text_box.pack(pady=10)
-            text_box.insert('end', message)
+            _text_box = Text(_frame_in_canvas, height=11, width=32, font=("Courier", 10, "italic"))
+            _text_box.grid(row=row_counter, padx=30, pady=10, column=1, sticky=E)
+            _text_box.insert('end', message)
             # Make the text box not editable.
-            text_box.config(state='disabled')
+            _text_box.config(state='disabled')
 
-            text_box.tag_add("star", "4.7", "4.15")
-            text_box.tag_config("star", background="white", foreground="red")
+            # Change color of stars.
+            _text_box.tag_add("star", "4.7", "4.15")
+            _text_box.tag_config("star", background="white", foreground="red")
+
+            _reserve_btn = tk.Button(
+            _frame_in_canvas,
+            text="Reserve a room",
+            font="Helvetica 9 bold",
+            width=18,
+            height=2,
+            fg="black",
+            bg="white",
+            command=self.__reserve_room_command())
+
+            _reserve_btn.grid(row=row_counter, column=2, padx=(0,30), pady=50, sticky=NW)
+
+            _review_btn = tk.Button(
+            _frame_in_canvas,
+            text="Leave a review",
+            font="Helvetica 9 bold",
+            width=18,
+            height=2,
+            fg="black",
+            bg="white",
+            command=self.__review_command())
+
+            _review_btn.grid(row=row_counter, column=2, padx=(0,30), pady=(120,0), sticky=NW)
+
+            row_counter += 1
 
         # Focus the newly created form.
         _root_results.after(1, lambda: _root_results.focus_force())
+
+    def __reserve_room_command(self):
+        """Method to reserve a hotel room.
+        """
+
+        # TODO create a form which asks for which date the user wants to reserve a room
+        # and in the pop up to show the name of the hotel when the button is clicked
+
+        # messagebox.showinfo("Reserved", f"Thank you for choosing hotel NAME. We are expecting you.")
+
+    def __review_command(self):
+        """Method to leave a review for the hotel.
+        """
+
+        # TODO create a form to leave a review for the hotel and store the reviews in a collection
+
 
     def __searchdb_command(self):
         """Method to get the user input to search in the database.
@@ -306,6 +354,9 @@ class GUI():
         self.__main_label = tk.Label(text="Looking for a hotel?\nYou are at the right place!", fg="white", bg="#1C86EE")
         self.__main_label.config(font=("Courier", 12))
 
+        self.__name_label = tk.Label(self.__root, text="Name:", fg="white", bg="#1C86EE")
+        self.__name_label.config(font=("Courier", 10))
+
         self.__city_label = tk.Label(self.__root, text="City:", fg="white", bg="#1C86EE")
         self.__city_label.config(font=("Courier", 10))
 
@@ -318,9 +369,11 @@ class GUI():
         self.__price_label = tk.Label(self.__root, text="Price:", fg="white", bg="#1C86EE")
         self.__price_label.config(font=("Courier", 10))
 
-    def __main_comboboxes(self):
-        """Method to create the comboboxes in main form.
+    def __main_entry_comboboxes(self):
+        """Method to create the entry and the comboboxes in main form.
         """
+
+        self.__name_entry = tk.Entry(self.__root, width=28)
 
         self.__city_combobox = Combobox(self.__root, width=25)
         self.__city_combobox['values'] = ['Burgas', 'Dobrich', 'Lovech', 'Montana', 'Pleven', 'Plovdiv', 'Razgrad', 'Ruse',
@@ -361,7 +414,7 @@ class GUI():
             width=15,
             height=2,
             fg="black",
-            bg="#F0FFFF",
+            bg="white",
             command=self.__searchdb_command)
 
     def __positioning(self):
@@ -376,35 +429,29 @@ class GUI():
 
         # Positions of the labels.
         self.__main_label.grid(row=0, column=1, pady=30, sticky=W)
+        self.__name_label.grid(row=1, column=0, pady=10, sticky=E)
+        self.__city_label.grid(row=2, column=0, pady=10, sticky=E)
+        self.__stars_label.grid(row=3, column=0, pady=10, sticky=E)
+        self.__amenities_label.grid(row=4, column=0, pady=10, sticky=E)
+        self.__price_label.grid(row=6, column=0, pady=10, sticky=E)
 
-        self.__city_label.grid(row=1, column=0, pady=10, sticky=E)
-
-        self.__stars_label.grid(row=2, column=0, pady=10, sticky=E)
-
-        self.__amenities_label.grid(row=3, column=0, pady=10, sticky=E)
-
-        self.__price_label.grid(row=5, column=0, pady=10, sticky=E)
+        # Position of the entry.
+        self.__name_entry.grid(row=1, column=1, padx=40, sticky=W)
 
         # Positions of the comboboxes.
-        self.__city_combobox.grid(row=1, column=1, padx=40, sticky=W)
-
-        self.__stars_combobox.grid(row=2, column=1, padx=40, sticky=W)
-
-        self.__price_combobox.grid(row=5, column=1, padx=40, sticky=W)
+        self.__city_combobox.grid(row=2, column=1, padx=40, sticky=W)
+        self.__stars_combobox.grid(row=3, column=1, padx=40, sticky=W)
+        self.__price_combobox.grid(row=6, column=1, padx=40, sticky=W)
 
         # Positions of the checkboxes.
-        self.__wi_fi_checkbox.grid(row=3, column=1, padx=40, sticky=W)
-
-        self.__ac_checkbox.grid(row=3, column=1, padx=10)
-
-        self.__bar_checkbox.grid(row=4, column=1, padx=40, sticky=W)
-
-        self.__restaurant_checkbox.grid(row=4, column=1, padx=10)
-
-        self.__pets_checkbox.grid(row=4, column=1, padx=10, sticky=E)
+        self.__wi_fi_checkbox.grid(row=4, column=1, padx=40, sticky=W)
+        self.__ac_checkbox.grid(row=4, column=1, padx=10)
+        self.__bar_checkbox.grid(row=5, column=1, padx=40, sticky=W)
+        self.__restaurant_checkbox.grid(row=5, column=1, padx=10)
+        self.__pets_checkbox.grid(row=5, column=1, padx=10, sticky=E)
 
         # Position of the search button.
-        self.__search_btn.grid(row=6, column=1, padx=70, pady=30, sticky=W)
+        self.__search_btn.grid(row=7, column=1, padx=70, pady=30, sticky=W)
 
     def __user_preferences(self):
         """Method to get the user preferences and store them in a dictionary.
@@ -414,18 +461,23 @@ class GUI():
         """
 
         # Create a default dict.
-        __searchdb_dict = {"Town": 0, "Star Rating": 0, "Amenities": {"Wi-fi": 0, "Air Conditioner": 0, "Bar": 0, "Restaurant": 0, "Allow Pets": 0}, "Price": 0}
+        __searchdb_dict = {"Name": 0, "Town": 0, "Star Rating": 0, "Amenities": {"Wi-fi": 0, "Air Conditioner": 0, "Bar": 0, "Restaurant": 0, "Allow Pets": 0}, "Price": 0}
 
         # Get the inputs.
+        __name_input = self.__name_entry.get()
         __city_input = self.__city_combobox.get()
-        # Lowercase the string and capitalize only the first letter of every word.
+
+        # Lowercase the string and capitalize only the first letter of every word of the name and city inputs.
+        __name_input = __name_input.lower().title()
         __city_input = __city_input.lower().title()
 
         __stars_input = self.__stars_combobox.get()
-
         __price_input = self.__price_combobox.get()
 
         # Append the dict with the entries.
+        if __name_input != "":
+            __searchdb_dict["Name"] = __name_input
+
         if __city_input != "":
             __searchdb_dict["Town"] = __city_input
 
