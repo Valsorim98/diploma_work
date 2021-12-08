@@ -5,6 +5,7 @@ import tkinter as tk
 from tkinter import messagebox
 from tkinter import *
 from tkinter.ttk import Combobox
+from functools import partial
 import emoji
 
 from database import Database
@@ -297,7 +298,8 @@ class GUI():
             height=2,
             fg="black",
             bg="white",
-            command=self.__reserve_room_command())
+            # Use partial to be able to pass the hotel name variable.
+            command=partial(self.__reserve_room_command, hotel["Hotel"], results_form=_root_results))
 
             _reserve_btn.grid(row=row_counter, column=2, padx=(0,30), pady=50, sticky=NW)
 
@@ -309,7 +311,7 @@ class GUI():
             height=2,
             fg="black",
             bg="white",
-            command=self.__review_command())
+            command=partial(self.__review_command, results_form=_root_results))
 
             _review_btn.grid(row=row_counter, column=2, padx=(0,30), pady=(120,0), sticky=NW)
 
@@ -318,21 +320,55 @@ class GUI():
         # Focus the newly created form.
         _root_results.after(1, lambda: _root_results.focus_force())
 
-    def __reserve_room_command(self):
+    def __reserve_room_command(self, hotel_name, results_form):
         """Method to reserve a hotel room.
         """
 
-        # TODO create a form which asks for which date the user wants to reserve a room
-        # and in the pop up to show the name of the hotel when the button is clicked
+        _root_reservation = Toplevel(self.__root, bg="#1C86EE")
+        _root_reservation.title("Reservation")
+        _root_reservation.resizable(False, False)
 
-        # messagebox.showinfo("Reserved", f"Thank you for choosing hotel NAME. We are expecting you.")
+        _root_reservation_width = 450
+        _root_reservation_height = 400
 
-    def __review_command(self):
+        _screen_width = _root_reservation.winfo_screenwidth()
+        _screen_height = _root_reservation.winfo_screenheight()
+        _x_cordinate = int((_screen_width/2) - (_root_reservation_width/2))
+        _y_cordinate = int((_screen_height/2) - (_root_reservation_height/2))
+        _root_reservation.geometry("{}x{}+{}+{}".format(_root_reservation_width, _root_reservation_height, _x_cordinate, _y_cordinate))
+
+        # Focus the newly created form.
+        _root_reservation.after(1, lambda: _root_reservation.focus_force())
+
+        # Destroy the results form.
+        results_form.destroy()
+
+        # messagebox.showinfo("Reserved", f"Thank you for choosing hotel {hotel_name}. We are expecting you on ,date here,.")
+
+    def __review_command(self, results_form):
         """Method to leave a review for the hotel.
         """
 
         # TODO create a form to leave a review for the hotel and store the reviews in a collection
 
+        _root_review = Toplevel(self.__root, bg="#1C86EE")
+        _root_review.title("Leave a review")
+        _root_review.resizable(False, False)
+
+        _root_review_width = 600
+        _root_review_height = 600
+
+        _screen_width = _root_review.winfo_screenwidth()
+        _screen_height = _root_review.winfo_screenheight()
+        _x_cordinate = int((_screen_width/2) - (_root_review_width/2))
+        _y_cordinate = int((_screen_height/2) - (_root_review_height/2))
+        _root_review.geometry("{}x{}+{}+{}".format(_root_review_width, _root_review_height, _x_cordinate, _y_cordinate))
+
+        # Focus the newly created form.
+        _root_review.after(1, lambda: _root_review.focus_force())
+
+        # Destroy the results form.
+        results_form.destroy()
 
     def __searchdb_command(self):
         """Method to get the user input to search in the database.
