@@ -5,6 +5,7 @@ import tkinter as tk
 from tkinter import messagebox
 from tkinter import *
 from tkinter.ttk import Combobox
+from tkcalendar import Calendar
 from functools import partial
 import emoji
 
@@ -118,14 +119,6 @@ class GUI():
 
         self.__main_form()
 
-        self.__main_labels()
-
-        self.__main_entry_comboboxes()
-
-        self.__main_checkboxes()
-
-        self.__main_button()
-
         self.__positioning()
 
         self.run()
@@ -170,6 +163,55 @@ class GUI():
 
         # Set window background colour.
         self.__root.configure(bg="#1C86EE")
+
+        # Create the labels in the main form.
+        self.__main_label = tk.Label(text="Looking for a hotel?\nYou are at the right place!", fg="white", bg="#1C86EE", font=("Courier", 12))
+        self.__name_label = tk.Label(self.__root, text="Name:", fg="white", bg="#1C86EE", font=("Courier", 10))
+        self.__city_label = tk.Label(self.__root, text="City:", fg="white", bg="#1C86EE", font=("Courier", 10))
+        self.__stars_label = tk.Label(self.__root, text="Stars:", fg="white", bg="#1C86EE", font=("Courier", 10))
+        self.__amenities_label = tk.Label(self.__root, text="Amenities:", fg="white", bg="#1C86EE", font=("Courier", 10))
+        self.__price_label = tk.Label(self.__root, text="Price:", fg="white", bg="#1C86EE", font=("Courier", 10))
+
+        # Create the entry in the main form.
+        self.__name_entry = tk.Entry(self.__root, width=28)
+
+        # Create the comboboxes in the main form.
+        self.__city_combobox = Combobox(self.__root, width=25)
+        self.__city_combobox['values'] = ['Burgas', 'Dobrich', 'Lovech', 'Montana', 'Pleven', 'Plovdiv', 'Razgrad', 'Ruse',
+                                            'Shumen', 'Silistra', 'Sliven', 'Sofia', 'Stara Zagora', 'Svishtov', 'Targovishte', 'Varna', 'Veliko Turnovo', 'Vraca']
+
+        self.__stars_combobox = Combobox(self.__root, width=25)
+        self.__stars_combobox['values'] = [1, 2, 3, 4, 5]
+
+        self.__price_combobox = Combobox(self.__root, width=25)
+        self.__price_combobox['values'] = ["Up to 30 BGN", "31-50 BGN", "51-70 BGN", "71-100 BGN", "More than 100 BGN"]
+
+        # Create the checkboxes in the main form.
+        self.__wi_fi_var = BooleanVar()
+        self.__wi_fi_checkbox = Checkbutton(self.__root, text="Wi-fi", fg="white", bg="#1C86EE", selectcolor="#1C86EE", variable=self.__wi_fi_var)
+
+        self.__ac_var = BooleanVar()
+        self.__ac_checkbox = Checkbutton(self.__root, text="Air Conditioner", fg="white", bg="#1C86EE", selectcolor="#1C86EE", variable=self.__ac_var)
+
+        self.__bar_var = BooleanVar()
+        self.__bar_checkbox = Checkbutton(self.__root, text="Bar", fg="white", bg="#1C86EE", selectcolor="#1C86EE", variable=self.__bar_var)
+
+        self.__restaurant_var = BooleanVar()
+        self.__restaurant_checkbox = Checkbutton(self.__root, text="Restaurant", fg="white", bg="#1C86EE", selectcolor="#1C86EE", variable=self.__restaurant_var)
+
+        self.__pets_var = BooleanVar()
+        self.__pets_checkbox = Checkbutton(self.__root, text="Allow Pets", fg="white", bg="#1C86EE", selectcolor="#1C86EE", variable=self.__pets_var)
+
+        # Create the button in the main form.
+        self.__search_btn = tk.Button(
+            self.__root,
+            text="Search",
+            font="Helvetica 9 bold",
+            width=15,
+            height=2,
+            fg="black",
+            bg="white",
+            command=self.__searchdb_command)
 
     def __results_form(self, found_hotels):
         """Method to show create a new form with the hotel results.
@@ -328,8 +370,8 @@ class GUI():
         _root_reservation.title("Reservation")
         _root_reservation.resizable(False, False)
 
-        _root_reservation_width = 450
-        _root_reservation_height = 400
+        _root_reservation_width = 600
+        _root_reservation_height = 600
 
         _screen_width = _root_reservation.winfo_screenwidth()
         _screen_height = _root_reservation.winfo_screenheight()
@@ -342,6 +384,37 @@ class GUI():
 
         # Destroy the results form.
         results_form.destroy()
+
+        # Configure the grid.
+        _root_reservation.columnconfigure(0, weight=1)
+        _root_reservation.columnconfigure(1, weight=1)
+        _root_reservation.columnconfigure(2, weight=1)
+
+        _main_label = Label(_root_reservation, text="Select accommodation date", fg="white", bg="#1C86EE", font=("Courier", 16))
+        _main_label.grid(row=0, column=1, padx=20, pady=(60,0))
+
+        _cal = Calendar(_root_reservation, selectmode = 'day',
+               year = 2021, month = 12,
+               day = 11)
+        _cal.grid(row=1, column=1, padx=20, pady=(40,0))
+
+        _days_label = tk.Label(_root_reservation, text="I would like to stay for       days", fg="white", bg="#1C86EE", font=("Courier", 14))
+        _days_label.grid(row=2, column=1, pady=(40,0))
+
+        _reserve_btn = tk.Button(
+            _root_reservation,
+            text="Reserve",
+            font="Helvetica 9 bold",
+            width=15,
+            height=2,
+            fg="black",
+            bg="white"
+            )
+
+        _reserve_btn.grid(row=3, column=1, pady=(40,0))
+
+        date = _cal.get_date()
+        print(date)
 
         # messagebox.showinfo("Reserved", f"Thank you for choosing hotel {hotel_name}. We are expecting you on ,date here,.")
 
@@ -383,78 +456,8 @@ class GUI():
         # Create a new form with the results.
         self.__results_form(found_hotels=_found_hotels)
 
-    def __main_labels(self):
-        """Method to create the labels in main form.
-        """
-
-        self.__main_label = tk.Label(text="Looking for a hotel?\nYou are at the right place!", fg="white", bg="#1C86EE")
-        self.__main_label.config(font=("Courier", 12))
-
-        self.__name_label = tk.Label(self.__root, text="Name:", fg="white", bg="#1C86EE")
-        self.__name_label.config(font=("Courier", 10))
-
-        self.__city_label = tk.Label(self.__root, text="City:", fg="white", bg="#1C86EE")
-        self.__city_label.config(font=("Courier", 10))
-
-        self.__stars_label = tk.Label(self.__root, text="Stars:", fg="white", bg="#1C86EE")
-        self.__stars_label.config(font=("Courier", 10))
-
-        self.__amenities_label = tk.Label(self.__root, text="Amenities:", fg="white", bg="#1C86EE")
-        self.__amenities_label.config(font=("Courier", 10))
-
-        self.__price_label = tk.Label(self.__root, text="Price:", fg="white", bg="#1C86EE")
-        self.__price_label.config(font=("Courier", 10))
-
-    def __main_entry_comboboxes(self):
-        """Method to create the entry and the comboboxes in main form.
-        """
-
-        self.__name_entry = tk.Entry(self.__root, width=28)
-
-        self.__city_combobox = Combobox(self.__root, width=25)
-        self.__city_combobox['values'] = ['Burgas', 'Dobrich', 'Lovech', 'Montana', 'Pleven', 'Plovdiv', 'Razgrad', 'Ruse',
-                                            'Shumen', 'Silistra', 'Sliven', 'Sofia', 'Stara Zagora', 'Svishtov', 'Targovishte', 'Varna', 'Veliko Turnovo', 'Vraca']
-
-        self.__stars_combobox = Combobox(self.__root, width=25)
-        self.__stars_combobox['values'] = [1, 2, 3, 4, 5]
-
-        self.__price_combobox = Combobox(self.__root, width=25)
-        self.__price_combobox['values'] = ["Up to 30 BGN", "31-50 BGN", "51-70 BGN", "71-100 BGN", "More than 100 BGN"]
-
-    def __main_checkboxes(self):
-        """Method to create the checkboxes in main form.
-        """
-
-        self.__wi_fi_var = BooleanVar()
-        self.__wi_fi_checkbox = Checkbutton(self.__root, text="Wi-fi", fg="white", bg="#1C86EE", selectcolor="#1C86EE", variable=self.__wi_fi_var)
-
-        self.__ac_var = BooleanVar()
-        self.__ac_checkbox = Checkbutton(self.__root, text="Air Conditioner", fg="white", bg="#1C86EE", selectcolor="#1C86EE", variable=self.__ac_var)
-
-        self.__bar_var = BooleanVar()
-        self.__bar_checkbox = Checkbutton(self.__root, text="Bar", fg="white", bg="#1C86EE", selectcolor="#1C86EE", variable=self.__bar_var)
-
-        self.__restaurant_var = BooleanVar()
-        self.__restaurant_checkbox = Checkbutton(self.__root, text="Restaurant", fg="white", bg="#1C86EE", selectcolor="#1C86EE", variable=self.__restaurant_var)
-
-        self.__pets_var = BooleanVar()
-        self.__pets_checkbox = Checkbutton(self.__root, text="Allow Pets", fg="white", bg="#1C86EE", selectcolor="#1C86EE", variable=self.__pets_var)
-
-    def __main_button(self):
-        """Method to create the button in main form.
-        """
-
-        self.__search_btn = tk.Button(
-            text="Search",
-            font="Helvetica 9 bold",
-            width=15,
-            height=2,
-            fg="black",
-            bg="white",
-            command=self.__searchdb_command)
-
     def __positioning(self):
-        """Method to adjust the positioning of the labels, entries and button.
+        """Method to adjust the positioning of the labels, entries and button in the main form.
         """
 
         # Configure the grid.
