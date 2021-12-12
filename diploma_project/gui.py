@@ -7,6 +7,7 @@ from tkinter import *
 from tkinter.ttk import Combobox
 from tkcalendar import Calendar
 from functools import partial
+import datetime
 import emoji
 
 from database import Database
@@ -214,7 +215,7 @@ class GUI():
             command=self.__searchdb_command)
 
     def __results_form(self, found_hotels):
-        """Method to show create a new form with the hotel results.
+        """Method to create a new form with the hotel results.
         """
 
         _found_hotels = found_hotels
@@ -341,7 +342,7 @@ class GUI():
             fg="black",
             bg="white",
             # Use partial to be able to pass the hotel name variable.
-            command=partial(self.__reserve_room_command, hotel["Hotel"], results_form=_root_results))
+            command=partial(self.__reserve_room_form, hotel_name=hotel["Hotel"], results_form=_root_results))
 
             _reserve_btn.grid(row=row_counter, column=2, padx=(0,30), pady=50, sticky=NW)
 
@@ -362,8 +363,8 @@ class GUI():
         # Focus the newly created form.
         _root_results.after(1, lambda: _root_results.focus_force())
 
-    def __reserve_room_command(self, hotel_name, results_form):
-        """Method to reserve a hotel room.
+    def __reserve_room_form(self, hotel_name, results_form):
+        """Method to create the reserve room form.
         """
 
         _root_reservation = Toplevel(self.__root, bg="#1C86EE")
@@ -393,13 +394,23 @@ class GUI():
         _main_label = Label(_root_reservation, text="Select accommodation date", fg="white", bg="#1C86EE", font=("Courier", 16))
         _main_label.grid(row=0, column=1, padx=20, pady=(60,0))
 
+        # Get current date.
+        _current_date = datetime.datetime.now()
+        _current_year = _current_date.year
+        _current_month = _current_date.month
+        _current_day = _current_date.day
+
+        # Create the calendar and pass the current date to be selected.
         _cal = Calendar(_root_reservation, selectmode = 'day',
-               year = 2021, month = 12,
-               day = 11)
+               year = _current_year, month = _current_month,
+               day = _current_day, date_pattern="dd-mm-yyyy")
         _cal.grid(row=1, column=1, padx=20, pady=(40,0))
 
-        _days_label = tk.Label(_root_reservation, text="I would like to stay for       days", fg="white", bg="#1C86EE", font=("Courier", 14))
+        _days_label = tk.Label(_root_reservation, text="I would like to stay for        days.", fg="white", bg="#1C86EE", font=("Courier", 14))
         _days_label.grid(row=2, column=1, pady=(40,0))
+
+        _days_entry = Entry(_root_reservation, width=8)
+        _days_entry.grid(row=2, column=1, padx=(220,0), pady=(40,0))
 
         _reserve_btn = tk.Button(
             _root_reservation,
@@ -408,21 +419,28 @@ class GUI():
             width=15,
             height=2,
             fg="black",
-            bg="white"
-            )
+            bg="white",
+            command=partial(self.__reserve_command, calendar=_cal, hotel_name=hotel_name, days_entered=_days_entry, reservation_form=_root_reservation))
 
         _reserve_btn.grid(row=3, column=1, pady=(40,0))
 
-        date = _cal.get_date()
-        print(date)
-
-        # messagebox.showinfo("Reserved", f"Thank you for choosing hotel {hotel_name}. We are expecting you on ,date here,.")
-
-    def __review_command(self, results_form):
-        """Method to leave a review for the hotel.
+    def __reserve_command(self, calendar, hotel_name, days_entered, reservation_form):
+        """Method to reserve a room.
         """
 
-        # TODO create a form to leave a review for the hotel and store the reviews in a collection
+        _cal = calendar
+        _date = _cal.get_date()
+
+        days_of_stay = days_entered.get()
+
+        messagebox.showinfo("Reserved", f"Thank you for choosing hotel {hotel_name}. We are expecting you on {_date}. Time of stay - {days_of_stay} days.")
+
+        # Destroy the reservation form when the reserve button is clicked.
+        reservation_form.destroy()
+
+    def __review_command(self, results_form):
+        """Method to create a review form.
+        """
 
         _root_review = Toplevel(self.__root, bg="#1C86EE")
         _root_review.title("Leave a review")
