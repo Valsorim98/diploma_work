@@ -406,13 +406,27 @@ class GUI():
                day = _current_day, date_pattern="dd-mm-yyyy")
         _cal.grid(row=1, column=1, padx=20, pady=(40,0))
 
-        _days_label = tk.Label(_root_reservation, text="I would like to stay for        days.", fg="white", bg="#1C86EE", font=("Courier", 14))
-        _days_label.grid(row=2, column=1, pady=(40,0))
+        _name_reservation_label = Label(_root_reservation, text="Enter names for reservation:", fg="white", bg="#1C86EE", font=("Courier", 14))
+        _name_reservation_label.grid(row=2, column=1, padx=(0,95), pady=(25,0))
 
-        _days_entry = Entry(_root_reservation, width=8)
-        _days_entry.grid(row=2, column=1, padx=(220,0), pady=(40,0))
+        _name_entry = Entry(_root_reservation, width=20)
+        _name_entry.grid(row=2, column=1, padx=(350,0), pady=(25,0))
 
-        _reserve_btn = tk.Button(
+        _room_cap_label = Label(_root_reservation, text="Reserve a room for        people.", fg="white", bg="#1C86EE", font=("Courier", 14))
+        _room_cap_label.grid(row=3, column=1, padx=(0,40), pady=(25,0))
+
+        _room_cap_combobox = Combobox(_root_reservation, width=8)
+        _room_cap_combobox['values'] = [1, 2, 3, 4]
+        _room_cap_combobox.grid(row=3,column=1, padx=(80,0), pady=(25,0))
+
+        _days_label = Label(_root_reservation, text="I would like to stay for        days.", fg="white", bg="#1C86EE", font=("Courier", 14))
+        _days_label.grid(row=4, column=1, pady=(25,0))
+
+        _days_combobox = Combobox(_root_reservation, width=8)
+        _days_combobox['values'] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+        _days_combobox.grid(row=4, column=1, padx=(215,0), pady=(25,0))
+
+        _reserve_btn = Button(
             _root_reservation,
             text="Reserve",
             font="Helvetica 9 bold",
@@ -420,23 +434,44 @@ class GUI():
             height=2,
             fg="black",
             bg="white",
-            command=partial(self.__reserve_command, calendar=_cal, hotel_name=hotel_name, days_entered=_days_entry, reservation_form=_root_reservation))
+            command=partial(self.__reserve_command, calendar=_cal, hotel_name=hotel_name, name_entry=_name_entry, room_capacity=_room_cap_combobox,
+                            days_entered=_days_combobox, reservation_form=_root_reservation))
 
-        _reserve_btn.grid(row=3, column=1, pady=(40,0))
+        _reserve_btn.grid(row=5, column=1, pady=(25,0))
 
-    def __reserve_command(self, calendar, hotel_name, days_entered, reservation_form):
+    def __reserve_command(self, calendar, hotel_name, name_entry, room_capacity, days_entered, reservation_form):
         """Method to reserve a room.
         """
 
-        _cal = calendar
-        _date = _cal.get_date()
+        # Get the date selected on the calendar.
+        date = calendar.get_date()
 
+        # Get the name for reservation.
+        name_entered = name_entry.get()
+
+        # Get the room capacity.
+        room_cap = room_capacity.get()
+
+        # Get the days to stay in the hotel.
         days_of_stay = days_entered.get()
 
-        messagebox.showinfo("Reserved", f"Thank you for choosing hotel {hotel_name}. We are expecting you on {_date}. Time of stay - {days_of_stay} days.")
-
-        # Destroy the reservation form when the reserve button is clicked.
-        reservation_form.destroy()
+        # Check if the value for days of stay is valid.
+        try:
+            name_entered = str(name_entered)
+            name_entered = name_entered.lower().title()
+            room_cap = int(room_cap)
+            days_of_stay = int(days_of_stay)
+            if (days_of_stay != "" and days_of_stay >= 1 and days_of_stay <= 14 and
+                room_cap != "" and room_cap >= 1 and room_cap <= 4 and
+                name_entered != ""):
+                reservation_form.destroy()
+                messagebox.showinfo("Reserved", f"Thank you for choosing hotel {hotel_name}. We are expecting {name_entered} on {date}. Time of stay - {days_of_stay} days.")
+            if days_of_stay <= 0 or days_of_stay >= 15 or room_cap <= 0 or room_cap >= 5 or name_entered == "":
+                messagebox.showerror("Something went wrong", f"We were unable to reserve a room for hotel {hotel_name}. Please enter valid values.")
+                reservation_form.after(1, lambda: reservation_form.focus_force())
+        except:
+            messagebox.showerror("Something went wrong", f"We were unable to reserve a room for hotel {hotel_name}. Please enter valid values.")
+            reservation_form.after(1, lambda: reservation_form.focus_force())
 
     def __review_command(self, results_form):
         """Method to create a review form.
