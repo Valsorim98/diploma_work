@@ -444,33 +444,32 @@ class GUI():
         """
 
         # Get the date selected on the calendar.
-        date = calendar.get_date()
-
+        _date = calendar.get_date()
+        # Get the hotel name.
+        _hotel_name = hotel_name
         # Get the name for reservation.
-        name_entered = name_entry.get()
-
+        _name_entered = name_entry.get()
         # Get the room capacity.
-        room_cap = room_capacity.get()
-
+        _room_cap = room_capacity.get()
         # Get the days to stay in the hotel.
-        days_of_stay = days_entered.get()
+        _days_of_stay = days_entered.get()
 
         # Check if the value for days of stay is valid.
         try:
-            name_entered = str(name_entered)
-            name_entered = name_entered.lower().title()
-            room_cap = int(room_cap)
-            days_of_stay = int(days_of_stay)
-            if (days_of_stay != "" and days_of_stay >= 1 and days_of_stay <= 14 and
-                room_cap != "" and room_cap >= 1 and room_cap <= 4 and
-                name_entered != ""):
+            _name_entered = str(_name_entered)
+            _name_entered = _name_entered.lower().title()
+            room_cap = int(_room_cap)
+            _days_of_stay = int(_days_of_stay)
+            if (_days_of_stay != "" and _days_of_stay >= 1 and _days_of_stay <= 14 and
+                _room_cap != "" and _room_cap >= 1 and _room_cap <= 4 and
+                _name_entered != ""):
                 reservation_form.destroy()
-                messagebox.showinfo("Reserved", f"Thank you for choosing hotel {hotel_name}. We are expecting {name_entered} on {date}. Time of stay - {days_of_stay} days.")
-            if days_of_stay <= 0 or days_of_stay >= 15 or room_cap <= 0 or room_cap >= 5 or name_entered == "":
-                messagebox.showerror("Something went wrong", f"We were unable to reserve a room for hotel {hotel_name}. Please enter valid values.")
+                messagebox.showinfo("Reserved", f"Thank you for choosing hotel {_hotel_name}. We are expecting {_name_entered} on {_date}. Time of stay - {_days_of_stay} days.")
+            if _days_of_stay <= 0 or _days_of_stay >= 15 or _room_cap <= 0 or _room_cap >= 5 or _name_entered == "":
+                messagebox.showerror("Something went wrong", f"We were unable to reserve a room for hotel {_hotel_name}. Please enter valid values.")
                 reservation_form.after(1, lambda: reservation_form.focus_force())
         except:
-            messagebox.showerror("Something went wrong", f"We were unable to reserve a room for hotel {hotel_name}. Please enter valid values.")
+            messagebox.showerror("Something went wrong", f"We were unable to reserve a room for hotel {_hotel_name}. Please enter valid values.")
             reservation_form.after(1, lambda: reservation_form.focus_force())
 
     def __review_command(self, results_form):
@@ -489,6 +488,41 @@ class GUI():
         _x_cordinate = int((_screen_width/2) - (_root_review_width/2))
         _y_cordinate = int((_screen_height/2) - (_root_review_height/2))
         _root_review.geometry("{}x{}+{}+{}".format(_root_review_width, _root_review_height, _x_cordinate, _y_cordinate))
+
+        # Configure the grid.
+        _root_review.columnconfigure(0, weight=1)
+        _root_review.columnconfigure(1, weight=1)
+        _root_review.columnconfigure(2, weight=1)
+
+        _main_label = Label(_root_review, text="Tell us what you think", fg="white", bg="#1C86EE", font=("Courier", 14))
+        _main_label.grid(row=0, column=1, pady=(50,0))
+
+        _name_label = Label(_root_review, text="Enter your name:", font=("Courier", 12), fg="white", bg="#1C86EE")
+        _name_label.grid(row=1, column=1, padx=(25,0), pady=(30,0), sticky=W)
+
+        _name_entry = Entry(_root_review, width=28)
+        _name_entry.grid(row=1, column=1, padx=(155,0), pady=(30,0))
+
+        _service_label = Label(_root_review, text="Evaluation of service:", font=("Courier", 12), fg="white", bg="#1C86EE")
+        _service_label.grid(row=2, column=1, padx=(25,0), pady=(30,0), sticky=W)
+
+        _service_scale = Scale(_root_review, from_=1, to=5, troughcolor="white", highlightbackground="#1C86EE", bg="#1C86EE", orient=HORIZONTAL)
+        _service_scale.set(3)
+        _service_scale.grid(row=2, column=1, padx=(225,0), pady=(15,0))
+
+        __food_label = Label(_root_review, text="How was the food?", font=("Courier", 12), fg="white", bg="#1C86EE")
+        __food_label.grid(row=3, column=1, padx=(25,0), pady=(30,0), sticky=W)
+
+        _food_scale = Scale(_root_review, from_=1, to=5, troughcolor="white", highlightbackground="#1C86EE", bg="#1C86EE", orient=HORIZONTAL)
+        _food_scale.set(3)
+        _food_scale.grid(row=3, column=1, padx=(225,0), pady=(15,0))
+
+        _feedback = Text(_root_review, height=9, width=42, font=("Courier", 12), wrap="word")
+        _feedback.grid(row=4, column=1, pady=30)
+        _feedback.insert(INSERT, "We want to know more for your experience with us.")
+
+        # Make the inserted text in the Text widget temporary.
+        _feedback.bind("<Button-1>", lambda e: _feedback.delete(1.0, END))
 
         # Focus the newly created form.
         _root_review.after(1, lambda: _root_review.focus_force())
