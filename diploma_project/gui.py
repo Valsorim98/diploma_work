@@ -216,6 +216,9 @@ class GUI():
 
     def __results_form(self, found_hotels):
         """Method to create a new form with the hotel results.
+
+        Args:
+            found_hotels (dict): All of the found hotels, searched by the user preferences.
         """
 
         _found_hotels = found_hotels
@@ -354,7 +357,7 @@ class GUI():
             height=2,
             fg="black",
             bg="white",
-            command=partial(self.__review_command, results_form=_root_results))
+            command=partial(self.__review_form, results_form=_root_results))
 
             _review_btn.grid(row=row_counter, column=2, padx=(0,30), pady=(120,0), sticky=NW)
 
@@ -365,6 +368,10 @@ class GUI():
 
     def __reserve_room_form(self, hotel_name, results_form):
         """Method to create the reserve room form.
+
+        Args:
+            hotel_name (str): The name of the chosen hotel for reservation.
+            results_form (tkform): The results form.
         """
 
         _root_reservation = Toplevel(self.__root, bg="#1C86EE")
@@ -441,6 +448,14 @@ class GUI():
 
     def __reserve_command(self, calendar, hotel_name, name_entry, room_capacity, days_entered, reservation_form):
         """Method to reserve a room.
+
+        Args:
+            calendar (tkcalendar): Calendar from tkinter.
+            hotel_name (str): The name of the chosen hotel.
+            name_entry (tkentry): The entered name from user for reservation.
+            room_capacity (tkcombobox): The capacity of the chosen room for reservation.
+            days_entered (tkcombobox): The days of stay at the hotel.
+            reservation_form (tkform): The reservation form.
         """
 
         # Get the date selected on the calendar.
@@ -454,11 +469,10 @@ class GUI():
         # Get the days to stay in the hotel.
         _days_of_stay = days_entered.get()
 
-        # Check if the value for days of stay is valid.
+        # Check if the entered values from the reserve form are valid.
         try:
-            _name_entered = str(_name_entered)
             _name_entered = _name_entered.lower().title()
-            room_cap = int(_room_cap)
+            _room_cap = int(_room_cap)
             _days_of_stay = int(_days_of_stay)
             if (_days_of_stay != "" and _days_of_stay >= 1 and _days_of_stay <= 14 and
                 _room_cap != "" and _room_cap >= 1 and _room_cap <= 4 and
@@ -472,8 +486,11 @@ class GUI():
             messagebox.showerror("Something went wrong", f"We were unable to reserve a room for hotel {_hotel_name}. Please enter valid values.")
             reservation_form.after(1, lambda: reservation_form.focus_force())
 
-    def __review_command(self, results_form):
-        """Method to create a review form.
+    def __review_form(self, results_form):
+        """Method to create the review form.
+
+        Args:
+            results_form (tkform): The results form.
         """
 
         _root_review = Toplevel(self.__root, bg="#1C86EE")
@@ -524,11 +541,57 @@ class GUI():
         # Make the inserted text in the Text widget temporary.
         _feedback.bind("<Button-1>", lambda e: _feedback.delete(1.0, END))
 
+        _submit_button = Button(_root_review,
+            text="Submit",
+            font="Helvetica 9 bold",
+            width=15,
+            height=2,
+            fg="black",
+            bg="white",
+            command=partial(self.__submit_review_command, name_entry=_name_entry, service_scale=_service_scale, food_scale=_food_scale, feedback=_feedback, review_form=_root_review))
+
+        _submit_button.grid(row=5, column=1)
+
         # Focus the newly created form.
         _root_review.after(1, lambda: _root_review.focus_force())
 
         # Destroy the results form.
         results_form.destroy()
+
+    def __submit_review_command(self, name_entry, service_scale, food_scale, feedback, review_form):
+        """Method to submit hotel revies in a database collection.
+
+        Args:
+            name_entry (str): Name of the user giving a review.
+            service_scale (int): Evaluation of the service.
+            food_scale (int): Evaluation of the food.
+            feedback (str): Feedback for the hotel in free text.
+            review_form (tkform): The review form.
+        """
+
+        # Get the name of the person giving a review.
+        _name_entered = name_entry.get()
+        # Get the evaluation of the service.
+        _service_eval = service_scale.get()
+        # Get the evaluation of the food.
+        _food_eval = food_scale.get()
+        # Get the free text feedback.
+        _feedback = feedback.get(1.0, END)
+
+        # Check if the entered values from the review form are valid.
+        try:
+            _name_entered = _name_entered.lower().title()
+            _service_eval = int(_service_eval)
+            _food_eval = int(_food_eval)
+            if _name_entered != "":
+                review_form.destroy()
+                messagebox.showinfo("Review sent", f"Thank you for your feedback.\nFrom {_name_entered} - service evaluation: {_service_eval}, food evaluation: {_food_eval}, additional information: {_feedback}")
+            if _name_entered == "":
+                messagebox.showerror("Something went wrong", f"We were unable to get your review. Please try again.")
+                review_form.after(1, lambda: review_form.focus_force())
+        except:
+            messagebox.showerror("Something went wrong", f"We were unable to get your review. Please try again.")
+            review_form.after(1, lambda: review_form.focus_force())
 
     def __searchdb_command(self):
         """Method to get the user input to search in the database.
