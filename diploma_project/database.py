@@ -39,13 +39,13 @@ class Database():
         """
 
         # Use SSL for the connection to the cluster.
-        ca = certifi.where()
+        _ca = certifi.where()
 
         # MongoDB URL to connect to the cluster.
-        url = "mongodb+srv://analytics:analytics-password@mflix.jkfp1.mongodb.net/Hotels?retryWrites=true&w=majority"
+        _url = "mongodb+srv://analytics:analytics-password@mflix.jkfp1.mongodb.net/Hotels?retryWrites=true&w=majority"
 
         # Connect to the database with the cluster URL and SSL.
-        self.__client = MongoClient(url, tlsCAFile=ca)
+        self.__client = MongoClient(_url, tlsCAFile=_ca)
 
         return self.__client["Hotels"]
 
@@ -54,25 +54,25 @@ class Database():
         """
 
         # Pass the method that connects to the database.
-        db = self.__connection_database()
+        _db = self.__connection_database()
 
         # Pass the collection with the hotels.
-        collection = db["Hotel_Info"]
+        _collection = _db["Hotel_Info"]
 
         # Get all the documents from the collection.
-        read_collection = collection.find({})
+        _read_collection = _collection.find({})
 
         # Flag for a suitable hotel.
-        suitable_hotel = False
+        _suitable_hotel = False
 
         # Hotel counter.
-        num_hotels = 0
+        _num_hotels = 0
 
         # Dict for found hotels.
-        found_hotels = {}
+        _found_hotels = {}
 
         # Prints all hotels in the town from user preferences.
-        for hotel in read_collection:
+        for hotel in _read_collection:
 
             # Create dict with the given preferences to search in the database.
             __searchdb = {}
@@ -89,7 +89,8 @@ class Database():
                 self.__user_preferences["Price"] == 0):
 
                 print(hotel)
-                num_hotels += 1
+                _num_hotels += 1
+                _found_hotels.update({_num_hotels:hotel})
 
             # If there are any given preferences to search with them.
             else:
@@ -134,48 +135,48 @@ class Database():
             for key, value in __searchdb.items():
 
                 if (key, value) in hotel.items():
-                    suitable_hotel = True
+                    _suitable_hotel = True
 
                 elif key == "Price":
 
                     if value == "Up to 30 BGN":
                         if hotel["Price"] <= 30:
-                            suitable_hotel = True
+                            _suitable_hotel = True
 
                         else:
-                            suitable_hotel = False
+                            _suitable_hotel = False
                             break
 
                     elif value == "31-50 BGN":
                         if hotel["Price"] >= 31 and hotel["Price"] <= 50:
-                            suitable_hotel = True
+                            _suitable_hotel = True
 
                         else:
-                            suitable_hotel = False
+                            _suitable_hotel = False
                             break
 
                     elif value == "51-70 BGN":
                         if hotel["Price"] >= 51 and hotel["Price"] <= 70:
-                            suitable_hotel = True
+                            _suitable_hotel = True
 
                         else:
-                            suitable_hotel = False
+                            _suitable_hotel = False
                             break
 
                     elif value == "71-100 BGN":
                         if hotel["Price"] >= 71 and hotel["Price"] <= 100:
-                            suitable_hotel = True
+                            _suitable_hotel = True
 
                         else:
-                            suitable_hotel = False
+                            _suitable_hotel = False
                             break
 
                     elif value == "More than 100 BGN":
                         if hotel["Price"] > 100:
-                            suitable_hotel = True
+                            _suitable_hotel = True
 
                         else:
-                            suitable_hotel = False
+                            _suitable_hotel = False
                             break
 
                     # If the input price is different from the options in the dropdown menu, to look for hotels up to the given price.
@@ -184,34 +185,34 @@ class Database():
                         hotel_price = int(__searchdb["Price"])
 
                         if hotel["Price"] <= hotel_price:
-                            suitable_hotel = True
+                            _suitable_hotel = True
 
                         else:
-                            suitable_hotel = False
+                            _suitable_hotel = False
 
                 else:
-                    suitable_hotel = False
+                    _suitable_hotel = False
                     break
 
             # Print only the hotels that coincide with all the user preferences and append them to found_hotels dict.
-            if suitable_hotel == True:
+            if _suitable_hotel == True:
                 print(hotel)
-                num_hotels += 1
-                found_hotels.update({num_hotels:hotel})
+                _num_hotels += 1
+                _found_hotels.update({_num_hotels:hotel})
 
         # For testing.
         print(f"\nSearch with: {__searchdb}")
-        print(f"{num_hotels} hotels found.")
+        print(f"{_num_hotels} hotels found.")
 
         # Delete every _id key from the dict.
-        for hotel in found_hotels.values():
+        for hotel in _found_hotels.values():
             if "_id" in hotel.keys():
                 hotel.pop("_id")
 
         # for testing
-        print(f"\nFound hotels: {found_hotels}")
+        print(f"\nFound hotels: {_found_hotels}")
 
         # Make found_hotels dict as a class attribute to be able to get it outside of the class.
-        self.suitable_hotels = found_hotels
+        self.suitable_hotels = _found_hotels
 
 # End region.
