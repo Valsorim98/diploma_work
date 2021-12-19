@@ -357,7 +357,7 @@ class GUI():
             height=2,
             fg="black",
             bg="white",
-            command=partial(self.__review_form, hotel_name=hotel["Hotel"], results_form=_root_results))
+            command=partial(self.__review_form, city=hotel["Town"], hotel_name=hotel["Hotel"], results_form=_root_results))
 
             _review_btn.grid(row=row_counter, column=2, padx=(0,30), pady=(120,0), sticky=NW)
 
@@ -495,7 +495,7 @@ class GUI():
             messagebox.showerror("Something went wrong", f"We were unable to reserve a room for hotel {_hotel_name}. Please enter valid values.")
             reservation_form.after(1, lambda: reservation_form.focus_force())
 
-    def __review_form(self, hotel_name, results_form):
+    def __review_form(self, city, hotel_name, results_form):
         """Method to create the review form.
 
         Args:
@@ -557,7 +557,7 @@ class GUI():
             height=2,
             fg="black",
             bg="white",
-            command=partial(self.__submit_review_command, hotel_name=hotel_name, name_entry=_name_entry, service_scale=_service_scale, food_scale=_food_scale, feedback=_feedback, review_form=_root_review))
+            command=partial(self.__submit_review_command, city=city, hotel_name=hotel_name, name_entry=_name_entry, service_scale=_service_scale, food_scale=_food_scale, feedback=_feedback, review_form=_root_review))
 
         _submit_button.grid(row=5, column=1)
 
@@ -567,16 +567,23 @@ class GUI():
         # Destroy the results form.
         results_form.destroy()
 
-    def __submit_review_command(self, hotel_name, name_entry, service_scale, food_scale, feedback, review_form):
-        """Method to submit hotel revies in a database collection.
+    def __submit_review_command(self, city, hotel_name, name_entry, service_scale, food_scale, feedback, review_form):
+        """Method to submit hotel reviews in a database collection.
 
         Args:
+            hotel_name (str): The name of the chosen hotel to give a review.
             name_entry (str): Name of the user giving a review.
             service_scale (int): Evaluation of the service.
             food_scale (int): Evaluation of the food.
             feedback (str): Feedback for the hotel in free text.
             review_form (tkform): The review form.
         """
+
+        # The name of the city of the chosen hotel.
+        _city = city
+
+        # Create dict to store the data for the review.
+        _review_dict = {}
 
         # Get the name of the chosen hotel.
         _hotel_name = hotel_name
@@ -588,6 +595,17 @@ class GUI():
         _food_eval = food_scale.get()
         # Get the free text feedback.
         _feedback = feedback.get(1.0, END)
+
+        # Operate on strings.
+        _name_entered = _name_entered.lower().title()
+        _feedback = _feedback[:-1]
+
+        # Append the dict with the data.
+        _review_dict["Town"] = _city
+        _review_dict["Hotel"] = _hotel_name
+        _review_dict["Name"] = _name_entered
+        _review_dict["Service"] = _service_eval
+        _review_dict["Food"] = _food_eval
 
         # Contains digit flag.
         _contains_digit = False
@@ -605,9 +623,13 @@ class GUI():
             _food_eval = int(_food_eval)
             if _name_entered != "" and _contains_digit == False:
                 review_form.destroy()
-                if _feedback == "We want to know more for your experience with us.\n" or _feedback == "\n":
+                if _feedback == "We want to know more for your experience with us." or _feedback == "":
+                    _review_dict["Additional info"] = "None"
+                    self.__database.insert_review(_review_dict)
                     messagebox.showinfo("Review sent", f"Thank you for your feedback for hotel {_hotel_name}.\nFrom {_name_entered} - service evaluation: {_service_eval}, food evaluation: {_food_eval}, additional information: None.")
-                if _feedback != "We want to know more for your experience with us.\n":
+                if _feedback != "We want to know more for your experience with us.":
+                    _review_dict["Additional info"] = _feedback
+                    self.__database.insert_review(_review_dict)
                     messagebox.showinfo("Review sent", f"Thank you for your feedback for hotel {_hotel_name}.\nFrom {_name_entered} - service evaluation: {_service_eval}, food evaluation: {_food_eval}, additional information: {_feedback}")
             if _name_entered == "":
                 messagebox.showerror("Something went wrong", f"We were unable to get your review for hotel {_hotel_name}. Please try again.")

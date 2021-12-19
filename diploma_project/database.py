@@ -215,4 +215,15 @@ class Database():
         # Make found_hotels dict as a class attribute to be able to get it outside of the class.
         self.suitable_hotels = _found_hotels
 
+    def insert_review(self, review_dict):
+
+        _review_dict = review_dict
+        
+        # The name of the database.
+        _hotels_db = self.__client["Hotels"]
+        # The name of the collection that the documents are inserted.
+        _reviews_col = _hotels_db["Review"]
+
+        _insert_document = _reviews_col.insert_one(_review_dict)
+
 # End region.
