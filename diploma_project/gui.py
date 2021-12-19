@@ -357,7 +357,7 @@ class GUI():
             height=2,
             fg="black",
             bg="white",
-            command=partial(self.__review_form, results_form=_root_results))
+            command=partial(self.__review_form, hotel_name=hotel["Hotel"], results_form=_root_results))
 
             _review_btn.grid(row=row_counter, column=2, padx=(0,30), pady=(120,0), sticky=NW)
 
@@ -441,12 +441,12 @@ class GUI():
             height=2,
             fg="black",
             bg="white",
-            command=partial(self.__reserve_command, calendar=_cal, hotel_name=hotel_name, name_entry=_name_entry, room_capacity=_room_cap_combobox,
+            command=partial(self.__reserve_room_command, calendar=_cal, hotel_name=hotel_name, name_entry=_name_entry, room_capacity=_room_cap_combobox,
                             days_entered=_days_combobox, reservation_form=_root_reservation))
 
         _reserve_btn.grid(row=5, column=1, pady=(25,0))
 
-    def __reserve_command(self, calendar, hotel_name, name_entry, room_capacity, days_entered, reservation_form):
+    def __reserve_room_command(self, calendar, hotel_name, name_entry, room_capacity, days_entered, reservation_form):
         """Method to reserve a room.
 
         Args:
@@ -469,14 +469,23 @@ class GUI():
         # Get the days to stay in the hotel.
         _days_of_stay = days_entered.get()
 
+        # Contains digit flag.
+        _contains_digit = False
+
         # Check if the entered values from the reserve form are valid.
         try:
+            for symbol in _name_entered:
+                if symbol.isdigit():
+                    messagebox.showerror("Something went wrong", f"We were unable to reserve a room for hotel {_hotel_name}. Please enter valid values.")
+                    reservation_form.after(1, lambda: reservation_form.focus_force())
+                    _contains_digit = True
+                    break
             _name_entered = _name_entered.lower().title()
             _room_cap = int(_room_cap)
             _days_of_stay = int(_days_of_stay)
             if (_days_of_stay != "" and _days_of_stay >= 1 and _days_of_stay <= 14 and
                 _room_cap != "" and _room_cap >= 1 and _room_cap <= 4 and
-                _name_entered != ""):
+                _name_entered != "" and _contains_digit == False):
                 reservation_form.destroy()
                 messagebox.showinfo("Reserved", f"Thank you for choosing hotel {_hotel_name}. We are expecting {_name_entered} on {_date}. Time of stay - {_days_of_stay} days.")
             if _days_of_stay <= 0 or _days_of_stay >= 15 or _room_cap <= 0 or _room_cap >= 5 or _name_entered == "":
@@ -486,7 +495,7 @@ class GUI():
             messagebox.showerror("Something went wrong", f"We were unable to reserve a room for hotel {_hotel_name}. Please enter valid values.")
             reservation_form.after(1, lambda: reservation_form.focus_force())
 
-    def __review_form(self, results_form):
+    def __review_form(self, hotel_name, results_form):
         """Method to create the review form.
 
         Args:
@@ -548,7 +557,7 @@ class GUI():
             height=2,
             fg="black",
             bg="white",
-            command=partial(self.__submit_review_command, name_entry=_name_entry, service_scale=_service_scale, food_scale=_food_scale, feedback=_feedback, review_form=_root_review))
+            command=partial(self.__submit_review_command, hotel_name=hotel_name, name_entry=_name_entry, service_scale=_service_scale, food_scale=_food_scale, feedback=_feedback, review_form=_root_review))
 
         _submit_button.grid(row=5, column=1)
 
@@ -558,7 +567,7 @@ class GUI():
         # Destroy the results form.
         results_form.destroy()
 
-    def __submit_review_command(self, name_entry, service_scale, food_scale, feedback, review_form):
+    def __submit_review_command(self, hotel_name, name_entry, service_scale, food_scale, feedback, review_form):
         """Method to submit hotel revies in a database collection.
 
         Args:
@@ -569,6 +578,8 @@ class GUI():
             review_form (tkform): The review form.
         """
 
+        # Get the name of the chosen hotel.
+        _hotel_name = hotel_name
         # Get the name of the person giving a review.
         _name_entered = name_entry.get()
         # Get the evaluation of the service.
@@ -578,19 +589,31 @@ class GUI():
         # Get the free text feedback.
         _feedback = feedback.get(1.0, END)
 
+        # Contains digit flag.
+        _contains_digit = False
+
         # Check if the entered values from the review form are valid.
         try:
+            for symbol in _name_entered:
+                if symbol.isdigit():
+                    messagebox.showerror("Something went wrong", f"We were unable to get your review for hotel {_hotel_name}. Please try again.")
+                    review_form.after(1, lambda: review_form.focus_force())
+                    _contains_digit = True
+                    break
             _name_entered = _name_entered.lower().title()
             _service_eval = int(_service_eval)
             _food_eval = int(_food_eval)
-            if _name_entered != "":
+            if _name_entered != "" and _contains_digit == False:
                 review_form.destroy()
-                messagebox.showinfo("Review sent", f"Thank you for your feedback.\nFrom {_name_entered} - service evaluation: {_service_eval}, food evaluation: {_food_eval}, additional information: {_feedback}")
+                if _feedback == "We want to know more for your experience with us.\n" or _feedback == "\n":
+                    messagebox.showinfo("Review sent", f"Thank you for your feedback for hotel {_hotel_name}.\nFrom {_name_entered} - service evaluation: {_service_eval}, food evaluation: {_food_eval}, additional information: None.")
+                if _feedback != "We want to know more for your experience with us.\n":
+                    messagebox.showinfo("Review sent", f"Thank you for your feedback for hotel {_hotel_name}.\nFrom {_name_entered} - service evaluation: {_service_eval}, food evaluation: {_food_eval}, additional information: {_feedback}")
             if _name_entered == "":
-                messagebox.showerror("Something went wrong", f"We were unable to get your review. Please try again.")
+                messagebox.showerror("Something went wrong", f"We were unable to get your review for hotel {_hotel_name}. Please try again.")
                 review_form.after(1, lambda: review_form.focus_force())
         except:
-            messagebox.showerror("Something went wrong", f"We were unable to get your review. Please try again.")
+            messagebox.showerror("Something went wrong", f"We were unable to get your review for hotel {_hotel_name}. Please try again.")
             review_form.after(1, lambda: review_form.focus_force())
 
     def __searchdb_command(self):
