@@ -8,6 +8,7 @@ from tkinter.ttk import Combobox
 from tkcalendar import Calendar
 from functools import partial
 import datetime
+from datetime import date
 import emoji
 
 from database import Database
@@ -413,7 +414,7 @@ class GUI():
                day = _current_day, date_pattern="dd-mm-yyyy")
         _cal.grid(row=1, column=1, padx=20, pady=(40,0))
 
-        _name_reservation_label = Label(_root_reservation, text="Enter names for reservation:", fg="white", bg="#1C86EE", font=("Courier", 14))
+        _name_reservation_label = Label(_root_reservation, text="Enter name for reservation:", fg="white", bg="#1C86EE", font=("Courier", 14))
         _name_reservation_label.grid(row=2, column=1, padx=(0,95), pady=(25,0))
 
         _name_entry = Entry(_root_reservation, width=20)
@@ -469,6 +470,59 @@ class GUI():
         # Get the days to stay in the hotel.
         _days_of_stay = days_entered.get()
 
+        # Split the date into a list.
+        _reservation_date = _date.split("-")
+
+        # Convert the date into integers.
+        _reserve_day = _reservation_date[0]
+        _reserve_day = int(_reserve_day)
+
+        _reserve_month = _reservation_date[1]
+        _reserve_month = int(_reserve_month)
+
+        _reserve_year = _reservation_date[2]
+        _reserve_year = int(_reserve_year)
+
+        # Get today's date in d/m/y format.
+        _today = date.today()
+        _today_format = _today.strftime("%d/%m/%Y")
+
+        # Split the date into a list.
+        _today_list = _today_format.split("/")
+
+        # Convert the date into integers.
+        _now_day = _today_list[0]
+        _now_day = int(_now_day)
+
+        _now_month = _today_list[1]
+        _now_month = int(_now_month)
+
+        _now_year = _today_list[2]
+        _now_year = int(_now_year)
+
+        # Flag to check if the given reservation date is in the past.
+        _invalid_reserve_date = False
+
+        # Checks for valid reservation date.
+        if _reserve_year > _now_year:
+            _invalid_reserve_date = False
+
+        if _reserve_year < _now_year:
+            _invalid_reserve_date = True
+
+        if _reserve_year == _now_year:
+            if _reserve_month < _now_month:
+                _invalid_reserve_date = True
+            if _reserve_month > _now_month:
+                _invalid_reserve_date = False
+            if _reserve_month == _now_month:
+                if _reserve_day > _now_day:
+                    _invalid_reserve_date = False
+                if _reserve_day == _now_day:
+                    _invalid_reserve_date = False
+                if _reserve_day < _now_day:
+                    _invalid_reserve_date = True
+
         # Contains digit flag.
         _contains_digit = False
 
@@ -480,12 +534,16 @@ class GUI():
                     reservation_form.after(1, lambda: reservation_form.focus_force())
                     _contains_digit = True
                     break
+                if _invalid_reserve_date == True:
+                    messagebox.showerror("Invalid date", f"We were unable to reserve a room for hotel {_hotel_name}. Please enter a valid date.")
+                    reservation_form.after(1, lambda: reservation_form.focus_force())
+                    break
             _name_entered = _name_entered.lower().title()
             _room_cap = int(_room_cap)
             _days_of_stay = int(_days_of_stay)
             if (_days_of_stay != "" and _days_of_stay >= 1 and _days_of_stay <= 14 and
                 _room_cap != "" and _room_cap >= 1 and _room_cap <= 4 and
-                _name_entered != "" and _contains_digit == False):
+                _name_entered != "" and _contains_digit == False and _invalid_reserve_date == False):
                 reservation_form.destroy()
                 messagebox.showinfo("Reserved", f"Thank you for choosing hotel {_hotel_name}. We are expecting {_name_entered} on {_date}. Time of stay - {_days_of_stay} days.")
             if _days_of_stay <= 0 or _days_of_stay >= 15 or _room_cap <= 0 or _room_cap >= 5 or _name_entered == "":
