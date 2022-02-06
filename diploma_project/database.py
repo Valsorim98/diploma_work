@@ -14,7 +14,7 @@ class Database():
     """Connect as a client.
     """
 
-    suitable_hotels = None
+    found_hotels = None
     """The found hotels.
     """
 
@@ -65,8 +65,8 @@ class Database():
         # Flag for a suitable hotel.
         _suitable_hotel = False
 
-        # Hotel counter.
-        _num_hotels = 0
+        # Found hotels counter.
+        _num_hotels_found = 0
 
         # Dict for found hotels.
         _found_hotels = {}
@@ -89,8 +89,8 @@ class Database():
                 self.__user_preferences["Price"] == 0):
 
                 print(hotel)
-                _num_hotels += 1
-                _found_hotels.update({_num_hotels:hotel})
+                _num_hotels_found += 1
+                _found_hotels.update({_num_hotels_found:hotel})
 
             # If there are any given preferences to search with them.
             else:
@@ -197,12 +197,12 @@ class Database():
             # Print only the hotels that coincide with all the user preferences and append them to found_hotels dict.
             if _suitable_hotel == True:
                 print(hotel)
-                _num_hotels += 1
-                _found_hotels.update({_num_hotels:hotel})
+                _num_hotels_found += 1
+                _found_hotels.update({_num_hotels_found:hotel})
 
         # For testing.
         print(f"\nSearch with: {__searchdb}")
-        print(f"{_num_hotels} hotels found.")
+        print(f"{_num_hotels_found} hotels found.")
 
         # Delete every _id key from the dict.
         for hotel in _found_hotels.values():
@@ -212,8 +212,8 @@ class Database():
         # for testing
         print(f"\nFound hotels: {_found_hotels}")
 
-        # Make found_hotels dict as a class attribute to be able to get it outside of the class.
-        self.suitable_hotels = _found_hotels
+        # Make _found_hotels dict as a class attribute to be able to get it outside of the class.
+        self.found_hotels = _found_hotels
 
     def insert_review(self, review_dict):
 
