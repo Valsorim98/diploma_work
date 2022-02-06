@@ -216,7 +216,7 @@ class GUI():
             command=self.__searchdb_command)
 
     def __results_form(self, found_hotels):
-        """Method to create a new form with the hotel results.
+        """Method to create a results form with the found hotels.
 
         Args:
             found_hotels (dict): All of the found hotels, searched by the user preferences.
@@ -704,10 +704,15 @@ class GUI():
 
         # Call Database class.
         self.__database = Database(__user_preferences)
-        _found_hotels = self.__database.suitable_hotels
+        _found_hotels = self.__database.found_hotels
 
-        # Create a new form with the results.
-        self.__results_form(found_hotels=_found_hotels)
+        # If the _found_hotels dict is not empty to create a results form and populate it with them.
+        if _found_hotels:
+            # Create a results form with the found hotels.
+            self.__results_form(found_hotels=_found_hotels)
+        # If it is empty to show a pop up message.
+        else:
+            messagebox.showerror("No hotels found", f"No hotels found for your preferences. Please try again.")
 
     def __positioning(self):
         """Method to adjust the positioning of the labels, entries and button in the main form.
