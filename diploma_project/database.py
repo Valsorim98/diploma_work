@@ -218,7 +218,7 @@ class Database():
     def insert_review(self, review_dict):
 
         _review_dict = review_dict
-        
+
         # The name of the database.
         _hotels_db = self.__client["Hotels"]
         # The name of the collection that the documents are inserted.

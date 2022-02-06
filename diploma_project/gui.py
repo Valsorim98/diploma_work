@@ -697,7 +697,7 @@ class GUI():
             review_form.after(1, lambda: review_form.focus_force())
 
     def __searchdb_command(self):
-        """Method to get the user input to search in the database.
+        """Method to get the user preferences stored in a dict and search in the database.
         """
 
         __user_preferences = self.__user_preferences()
@@ -797,7 +797,7 @@ class GUI():
             __searchdb_dict["Price"] = __price_input
 
         # for testing
-        print(__searchdb_dict)
+        print(f"Searchdb dict: {__searchdb_dict}")
 
         return __searchdb_dict
 
