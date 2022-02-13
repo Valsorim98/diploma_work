@@ -20,7 +20,7 @@ class GUI():
 # Region attributes.
 
     __root = None
-    """Root window instance.
+    """Root window instance for main form.
     """
 
     __search_btn = None
@@ -139,6 +139,24 @@ class GUI():
 
 # Region private methods.
 
+    def __onreturn_main(self, event):
+        """Method to call searchdb_command on 'Return' button click.
+        """
+
+        self.__searchdb_command()
+
+    def __onreturn_reserve(self, calendar, hotel_name, name_entry, room_capacity, days_entered, reservation_form):
+        """Method to call reserve_room_command on 'Return' button click.
+        """
+
+        self.__reserve_room_command(calendar, hotel_name, name_entry, room_capacity, days_entered, reservation_form)
+
+    def __onreturn_review(self, city, hotel_name, _name_entry, _service_scale, _food_scale, _feedback, _root_review):
+        """Method to call submit_review_command on 'Return' button click.
+        """
+
+        self.__submit_review_command(city, hotel_name, _name_entry, _service_scale, _food_scale, _feedback, _root_review)
+
     def __main_form(self):
         """Method to create the main GUI form.
         """
@@ -214,6 +232,9 @@ class GUI():
             fg="black",
             bg="white",
             command=self.__searchdb_command)
+
+        # On 'Return' button click to click the 'Search' button on main form.
+        self.__root.bind("<Return>", self.__onreturn_main)
 
     def __results_form(self, found_hotels):
         """Method to create a results form with the found hotels.
@@ -447,6 +468,10 @@ class GUI():
 
         _reserve_btn.grid(row=5, column=1, pady=(25,0))
 
+        # On 'Return' button click to click the 'Reserve' button on reservation form.
+        _root_reservation.bind("<Return>", lambda reserve: self.__onreturn_reserve(_cal, hotel_name, _name_entry, _room_cap_combobox,
+                            _days_combobox, _root_reservation))
+
     def __reserve_room_command(self, calendar, hotel_name, name_entry, room_capacity, days_entered, reservation_form):
         """Method to reserve a room.
 
@@ -615,7 +640,8 @@ class GUI():
             height=2,
             fg="black",
             bg="white",
-            command=partial(self.__submit_review_command, city=city, hotel_name=hotel_name, name_entry=_name_entry, service_scale=_service_scale, food_scale=_food_scale, feedback=_feedback, review_form=_root_review))
+            command=partial(self.__submit_review_command, city=city, hotel_name=hotel_name, name_entry=_name_entry, service_scale=_service_scale,
+                            food_scale=_food_scale, feedback=_feedback, review_form=_root_review))
 
         _submit_button.grid(row=5, column=1)
 
@@ -624,6 +650,8 @@ class GUI():
 
         # Destroy the results form.
         results_form.destroy()
+
+        _root_review.bind("<Return>", lambda review: self.__onreturn_review(city, hotel_name, _name_entry, _service_scale, _food_scale, _feedback, _root_review))
 
     def __submit_review_command(self, city, hotel_name, name_entry, service_scale, food_scale, feedback, review_form):
         """Method to submit hotel reviews in a database collection.
