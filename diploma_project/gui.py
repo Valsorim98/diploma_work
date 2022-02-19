@@ -260,11 +260,11 @@ class GUI():
 
         _root_results.configure(bg="#1C86EE")
 
-        # Create canvas on the frame.
+        # Create canvas over root.
         _canvas = Canvas(_root_results, bg="#1C86EE", bd=0, highlightthickness=0, relief='ridge')
         _canvas.pack(side=LEFT, expand=True, fill=BOTH)
 
-        # Create the scrollbar on the frame.
+        # Create the scrollbar on root.
         _scrollbar = Scrollbar(_root_results, orient="vertical", command=_canvas.yview)
         _scrollbar.pack(side=RIGHT, fill=Y)
 
@@ -273,18 +273,18 @@ class GUI():
         _canvas.bind('<Configure>', lambda e: _canvas.configure(scrollregion=_canvas.bbox("all")))
 
         # Create a frame on the canvas.
-        _frame_in_canvas = Frame(_canvas, bg="#1C86EE", pady=30)
+        _frame_on_canvas = Frame(_canvas, bg="#1C86EE", pady=30)
 
         # Populate the frame on the canvas with the text boxes.
         # Coords start with (x, y).
-        _canvas.create_window((0,0), window=_frame_in_canvas, anchor="nw", width=750)
+        _canvas.create_window((0,0), window=_frame_on_canvas, anchor="nw", width=750)
 
         # Configure the grid.
-        _frame_in_canvas.columnconfigure(0, weight=1)
-        _frame_in_canvas.columnconfigure(1, weight=2)
-        _frame_in_canvas.columnconfigure(2, weight=1)
+        _frame_on_canvas.columnconfigure(0, weight=1)
+        _frame_on_canvas.columnconfigure(1, weight=2)
+        _frame_on_canvas.columnconfigure(2, weight=1)
 
-        _main_label = Label(_frame_in_canvas, text="Results", fg="white", bg="#1C86EE", font=("arial", 20))
+        _main_label = Label(_frame_on_canvas, text="Results", fg="white", bg="#1C86EE", font=("arial", 20))
         _main_label.grid(row=0, column=1, padx=112, pady=(0,20), sticky=E)
 
         row_counter = 1
@@ -348,7 +348,7 @@ class GUI():
                 pets_msg = "\nAllow pets: No"
                 message = message + pets_msg
 
-            _text_box = Text(_frame_in_canvas, height=11, width=32, font=("Courier", 10, "italic"))
+            _text_box = Text(_frame_on_canvas, height=11, width=32, font=("Courier", 10, "italic"))
             _text_box.grid(row=row_counter, padx=30, pady=10, column=1, sticky=E)
             _text_box.insert('end', message)
             # Make the text box not editable.
@@ -359,7 +359,7 @@ class GUI():
             _text_box.tag_config("star", background="white", foreground="red")
 
             _reserve_btn = tk.Button(
-            _frame_in_canvas,
+            _frame_on_canvas,
             text="Reserve a room",
             font="Helvetica 9 bold",
             width=18,
@@ -372,7 +372,7 @@ class GUI():
             _reserve_btn.grid(row=row_counter, column=2, padx=(0,30), pady=50, sticky=NW)
 
             _review_btn = tk.Button(
-            _frame_in_canvas,
+            _frame_on_canvas,
             text="Leave a review",
             font="Helvetica 9 bold",
             width=18,
