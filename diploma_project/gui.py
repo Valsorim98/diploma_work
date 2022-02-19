@@ -268,7 +268,7 @@ class GUI():
         _scrollbar = Scrollbar(_root_results, orient="vertical", command=_canvas.yview)
         _scrollbar.pack(side=RIGHT, fill=Y)
 
-        # Make the canvas scrollable.
+        # Link the scrollbar to the canvas.
         _canvas.config(yscrollcommand=_scrollbar.set)
         _canvas.bind('<Configure>', lambda e: _canvas.configure(scrollregion=_canvas.bbox("all")))
 
