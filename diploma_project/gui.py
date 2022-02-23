@@ -123,36 +123,32 @@ class GUI():
 
         self.__positioning()
 
-        self.run()
+        self.__run()
 
 # End region constructor.
 
-# Region public methods.
+# Region private methods.
 
-    def run(self):
+    def __run(self):
         """Run the main loop.
         """
 
         self.__root.mainloop()
 
-# End region public methods.
-
-# Region private methods.
-
     def __onreturn_main(self, event):
-        """Method to call searchdb_command on 'Return' button click.
+        """When on main form, calls searchdb_command method on 'Return' button click.
         """
 
         self.__searchdb_command()
 
     def __onreturn_reserve(self, calendar, hotel_name, name_entry, room_capacity, days_entered, reservation_form):
-        """Method to call reserve_room_command on 'Return' button click.
+        """When on reserve room form, calls reserve_room_command method on 'Return' button click.
         """
 
         self.__reserve_room_command(calendar, hotel_name, name_entry, room_capacity, days_entered, reservation_form)
 
     def __onreturn_review(self, city, hotel_name, _name_entry, _service_scale, _food_scale, _feedback, _root_review):
-        """Method to call submit_review_command on 'Return' button click.
+        """When on review form, calls submit_review_command on 'Return' button click.
         """
 
         self.__submit_review_command(city, hotel_name, _name_entry, _service_scale, _food_scale, _feedback, _root_review)
@@ -237,7 +233,7 @@ class GUI():
         self.__root.bind("<Return>", self.__onreturn_main)
 
     def __results_form(self, found_hotels):
-        """Method to create a results form with the found hotels.
+        """Method to create a results GUI form with the found hotels.
 
         Args:
             found_hotels (dict): All of the found hotels, searched by the user preferences.
@@ -389,7 +385,7 @@ class GUI():
         _root_results.after(1, lambda: _root_results.focus_force())
 
     def __reserve_room_form(self, hotel_name, results_form):
-        """Method to create the reserve room form.
+        """Method to create the reserve room GUI form.
 
         Args:
             hotel_name (str): The name of the chosen hotel for reservation.
@@ -579,7 +575,7 @@ class GUI():
             reservation_form.after(1, lambda: reservation_form.focus_force())
 
     def __review_form(self, city, hotel_name, results_form):
-        """Method to create the review form.
+        """Method to create the review GUI form.
 
         Args:
             results_form (tkform): The results form.
@@ -779,7 +775,7 @@ class GUI():
         self.__search_btn.grid(row=7, column=1, padx=70, pady=30, sticky=W)
 
     def __user_preferences(self):
-        """Method to get the user preferences and store them in a dictionary.
+        """Method to get the user preferences from the main GUI form and store them in a dictionary.
 
         Returns:
             dict: The user preferences.

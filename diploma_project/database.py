@@ -215,7 +215,16 @@ class Database():
         # Make _found_hotels dict as a class attribute to be able to get it outside of the class.
         self.found_hotels = _found_hotels
 
+# End region.
+
+# Region public methods.
+
     def insert_review(self, review_dict):
+        """Method to insert a hotel review in the database collection.
+
+        Args:
+            review_dict (dict): Dictionary containing the hotel review to be inserted in the database collection.
+        """
 
         _review_dict = review_dict
 
