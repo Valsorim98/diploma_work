@@ -23,6 +23,10 @@ class GUI():
     """Root window instance for main form.
     """
 
+    __results_canvas = None
+    """Canvas on results form.
+    """
+
     __search_btn = None
     """Search button.
     """
@@ -232,6 +236,9 @@ class GUI():
         # On 'Return' button click to click the 'Search' button on main form.
         self.__root.bind("<Return>", self.__onreturn_main)
 
+    def __on_mousewheel_results(self, event):
+        self.__results_canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+
     def __results_form(self, found_hotels):
         """Method to create a results GUI form with the found hotels.
 
@@ -257,23 +264,26 @@ class GUI():
         _root_results.configure(bg="#1C86EE")
 
         # Create canvas over root.
-        _canvas = Canvas(_root_results, bg="#1C86EE", bd=0, highlightthickness=0, relief='ridge')
-        _canvas.pack(side=LEFT, expand=True, fill=BOTH)
+        self.__results_canvas = Canvas(_root_results, bg="#1C86EE", bd=0, highlightthickness=0, relief='ridge')
+        self.__results_canvas.pack(side=LEFT, expand=True, fill=BOTH)
 
         # Create the scrollbar on root.
-        _scrollbar = Scrollbar(_root_results, orient="vertical", command=_canvas.yview)
+        _scrollbar = Scrollbar(_root_results, orient="vertical", command=self.__results_canvas.yview)
         _scrollbar.pack(side=RIGHT, fill=Y)
 
-        # Link the scrollbar to the canvas.
-        _canvas.config(yscrollcommand=_scrollbar.set)
-        _canvas.bind('<Configure>', lambda e: _canvas.configure(scrollregion=_canvas.bbox("all")))
+        # Link the scrollbar to the canvas to make it active.
+        self.__results_canvas.config(yscrollcommand=_scrollbar.set)
+        self.__results_canvas.bind('<Configure>', lambda e: self.__results_canvas.configure(scrollregion=self.__results_canvas.bbox("all")))
+
+        # Bind mouse wheel activation to the scrollbar in canvas.
+        self.__results_canvas.bind_all("<MouseWheel>", self.__on_mousewheel_results)
 
         # Create a frame on the canvas.
-        _frame_on_canvas = Frame(_canvas, bg="#1C86EE", pady=30)
+        _frame_on_canvas = Frame(self.__results_canvas, bg="#1C86EE", pady=30)
 
         # Populate the frame on the canvas with the text boxes.
         # Coords start with (x, y).
-        _canvas.create_window((0,0), window=_frame_on_canvas, anchor="nw", width=750)
+        self.__results_canvas.create_window((0,0), window=_frame_on_canvas, anchor="nw", width=750)
 
         # Configure the grid.
         _frame_on_canvas.columnconfigure(0, weight=1)
