@@ -139,6 +139,12 @@ class GUI():
 
         self.__root.mainloop()
 
+    def change_language_eng():
+        pass
+
+    def change_language_bul():
+        pass
+
     def __onreturn_main(self, event):
         """When on main form, calls searchdb_command method on 'Return' button click.
         """
@@ -156,6 +162,9 @@ class GUI():
         """
 
         self.__submit_review_command(city, hotel_name, _name_entry, _service_scale, _food_scale, _feedback, _root_review)
+
+    def __on_mousewheel_results(self, event):
+        self.__results_canvas.yview_scroll(int(-1*(event.delta/120)), "units")
 
     def __main_form(self):
         """Method to create the main GUI form.
@@ -222,7 +231,7 @@ class GUI():
         self.__pets_var = BooleanVar()
         self.__pets_checkbox = Checkbutton(self.__root, text="Allow Pets", fg="white", bg="#1C86EE", selectcolor="#1C86EE", variable=self.__pets_var)
 
-        # Create the button in the main form.
+        # Create the search button in the main form.
         self.__search_btn = tk.Button(
             self.__root,
             text="Search",
@@ -235,9 +244,6 @@ class GUI():
 
         # On 'Return' button click to click the 'Search' button on main form.
         self.__root.bind("<Return>", self.__onreturn_main)
-
-    def __on_mousewheel_results(self, event):
-        self.__results_canvas.yview_scroll(int(-1*(event.delta/120)), "units")
 
     def __results_form(self, found_hotels):
         """Method to create a results GUI form with the found hotels.
@@ -749,7 +755,7 @@ class GUI():
             messagebox.showerror("No hotels found", f"No hotels found for your preferences. Please try again.")
 
     def __positioning(self):
-        """Method to adjust the positioning of the labels, entries and button in the main form.
+        """Method to adjust the positioning of the labels, entries and buttons in the main form.
         """
 
         # Configure the grid.
