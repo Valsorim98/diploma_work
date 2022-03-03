@@ -320,7 +320,7 @@ class GUI():
             star = emoji.emojize(":star:")
 
             # Starting message.
-            msg = f'''\n    City: {hotel["Town"]}\n    Name: {hotel["Hotel"]}\n    Stars: '''
+            msg = f'''\n     City: {hotel["Town"]}\n     Name: {hotel["Hotel"]}\n     Stars: '''
             stars_msg = ""
 
             # Add number of stars equal to the star rating of the hotel.
@@ -330,46 +330,46 @@ class GUI():
             price_msg = hotel["Price"]
 
             # Concatenate strings.
-            message = msg + stars_msg + f"\n    Price: {price_msg} BGN"
+            message = msg + stars_msg + f"\n     Price: {price_msg} BGN"
 
             # Concatenate string with wi-fi.
             if hotel["Wi-fi"] == True:
-                wi_fi_msg = "\n    Wi-fi: Yes"
+                wi_fi_msg = "\n     Wi-fi: Yes"
                 message = message + wi_fi_msg
             else:
-                wi_fi_msg = "\n    Wi-fi: No"
+                wi_fi_msg = "\n     Wi-fi: No"
                 message = message + wi_fi_msg
 
             # Concatenate string with air conditioner.
             if hotel["Air Conditioner"] == True:
-                ac_msg = "\n    Air conditioner: Yes"
+                ac_msg = "\n     Air conditioner: Yes"
                 message = message + ac_msg
             else:
-                ac_msg = "\n    Air conditioner: No"
+                ac_msg = "\n     Air conditioner: No"
                 message = message + ac_msg
 
             # Concatenate string with bar.
             if hotel["Bar"] == True:
-                bar_msg = "\n    Bar: Yes"
+                bar_msg = "\n     Bar: Yes"
                 message = message + bar_msg
             else:
-                bar_msg = "\n    Bar: No"
+                bar_msg = "\n     Bar: No"
                 message = message + bar_msg
 
             # Concatenate string with restaurant.
             if hotel["Restaurant"] == True:
-                restaurant_msg = "\n    Restaurant: Yes"
+                restaurant_msg = "\n     Restaurant: Yes"
                 message = message + restaurant_msg
             else:
-                restaurant_msg = "\n    Restaurant: No"
+                restaurant_msg = "\n     Restaurant: No"
                 message = message + restaurant_msg
 
             # Concatenate string with pets.
             if hotel["Allow Pets"] == True:
-                pets_msg = "\n    Allow pets: Yes"
+                pets_msg = "\n     Allow pets: Yes"
                 message = message + pets_msg
             else:
-                pets_msg = "\n    Allow pets: No"
+                pets_msg = "\n     Allow pets: No"
                 message = message + pets_msg
 
             _text_box = Text(_frame_on_canvas, height=11, width=32, font=("Courier", 10, "italic"))
@@ -379,7 +379,7 @@ class GUI():
             _text_box.config(state='disabled')
 
             # Change color of stars.
-            _text_box.tag_add("star", "4.10", "4.16")
+            _text_box.tag_add("star", "4.11", "4.17")
             _text_box.tag_config("star", background="white", foreground="red")
 
             _reserve_btn = tk.Button(
