@@ -27,6 +27,14 @@ class GUI():
     """Canvas on results form.
     """
 
+    __eng_button = None
+    """Button to change language to English.
+    """
+
+    __bul_button = None
+    """Button to change language to Bulgarian.
+    """
+
     __search_btn = None
     """Search button.
     """
@@ -139,10 +147,10 @@ class GUI():
 
         self.__root.mainloop()
 
-    def change_language_eng():
+    def __change_language_eng(self):
         pass
 
-    def change_language_bul():
+    def __change_language_bul(self):
         pass
 
     def __onreturn_main(self, event):
@@ -192,6 +200,10 @@ class GUI():
 
         # Set window background colour.
         self.__root.configure(bg="#1C86EE")
+
+        # Create buttons to change the language.
+        self.__eng_button = tk.Button(self.__root, text='English', command=self.__change_language_eng)
+        self.__bul_button = tk.Button(self.__root, text='Български', command=self.__change_language_bul)
 
         # Create the labels in the main form.
         self.__main_label = tk.Label(text="Looking for a hotel?\nYou are at the right place!", fg="white", bg="#1C86EE", font=("Courier", 12))
@@ -308,7 +320,7 @@ class GUI():
             star = emoji.emojize(":star:")
 
             # Starting message.
-            msg = f'''\nCity: {hotel["Town"]}\nName: {hotel["Hotel"]}\nStars: '''
+            msg = f'''\n    City: {hotel["Town"]}\n    Name: {hotel["Hotel"]}\n    Stars: '''
             stars_msg = ""
 
             # Add number of stars equal to the star rating of the hotel.
@@ -318,46 +330,46 @@ class GUI():
             price_msg = hotel["Price"]
 
             # Concatenate strings.
-            message = msg + stars_msg + f"\nPrice: {price_msg} BGN"
+            message = msg + stars_msg + f"\n    Price: {price_msg} BGN"
 
             # Concatenate string with wi-fi.
             if hotel["Wi-fi"] == True:
-                wi_fi_msg = "\nWi-fi: Yes"
+                wi_fi_msg = "\n    Wi-fi: Yes"
                 message = message + wi_fi_msg
             else:
-                wi_fi_msg = "\nWi-fi: No"
+                wi_fi_msg = "\n    Wi-fi: No"
                 message = message + wi_fi_msg
 
             # Concatenate string with air conditioner.
             if hotel["Air Conditioner"] == True:
-                ac_msg = "\nAir conditioner: Yes"
+                ac_msg = "\n    Air conditioner: Yes"
                 message = message + ac_msg
             else:
-                ac_msg = "\nAir conditioner: No"
+                ac_msg = "\n    Air conditioner: No"
                 message = message + ac_msg
 
             # Concatenate string with bar.
             if hotel["Bar"] == True:
-                bar_msg = "\nBar: Yes"
+                bar_msg = "\n    Bar: Yes"
                 message = message + bar_msg
             else:
-                bar_msg = "\nBar: No"
+                bar_msg = "\n    Bar: No"
                 message = message + bar_msg
 
             # Concatenate string with restaurant.
             if hotel["Restaurant"] == True:
-                restaurant_msg = "\nRestaurant: Yes"
+                restaurant_msg = "\n    Restaurant: Yes"
                 message = message + restaurant_msg
             else:
-                restaurant_msg = "\nRestaurant: No"
+                restaurant_msg = "\n    Restaurant: No"
                 message = message + restaurant_msg
 
             # Concatenate string with pets.
             if hotel["Allow Pets"] == True:
-                pets_msg = "\nAllow pets: Yes"
+                pets_msg = "\n    Allow pets: Yes"
                 message = message + pets_msg
             else:
-                pets_msg = "\nAllow pets: No"
+                pets_msg = "\n    Allow pets: No"
                 message = message + pets_msg
 
             _text_box = Text(_frame_on_canvas, height=11, width=32, font=("Courier", 10, "italic"))
@@ -367,7 +379,7 @@ class GUI():
             _text_box.config(state='disabled')
 
             # Change color of stars.
-            _text_box.tag_add("star", "4.7", "4.15")
+            _text_box.tag_add("star", "4.10", "4.16")
             _text_box.tag_config("star", background="white", foreground="red")
 
             _reserve_btn = tk.Button(
@@ -764,13 +776,17 @@ class GUI():
         self.__root.columnconfigure(1, weight=1)
         self.__root.columnconfigure(2, weight=2)
 
+        # Positions of language change buttons.
+        self.__eng_button.grid(row=0, column=0, padx=(10,0), pady=(10,0), sticky=NW)
+        self.__bul_button.grid(row=0, column=0, padx=(65,0), pady=(10,0), sticky=NW)
+
         # Positions of the labels.
-        self.__main_label.grid(row=0, column=1, pady=30, sticky=W)
+        self.__main_label.grid(row=0, column=1, padx=(0,75), pady=(60,40), sticky=W)
         self.__name_label.grid(row=1, column=0, pady=10, sticky=E)
         self.__city_label.grid(row=2, column=0, pady=10, sticky=E)
         self.__stars_label.grid(row=3, column=0, pady=10, sticky=E)
         self.__amenities_label.grid(row=4, column=0, pady=10, sticky=E)
-        self.__price_label.grid(row=6, column=0, pady=10, sticky=E)
+        self.__price_label.grid(row=6, column=0, pady=20, sticky=E)
 
         # Position of the entry.
         self.__name_entry.grid(row=1, column=1, padx=40, sticky=W)
@@ -778,14 +794,14 @@ class GUI():
         # Positions of the comboboxes.
         self.__city_combobox.grid(row=2, column=1, padx=40, sticky=W)
         self.__stars_combobox.grid(row=3, column=1, padx=40, sticky=W)
-        self.__price_combobox.grid(row=6, column=1, padx=40, sticky=W)
+        self.__price_combobox.grid(row=6, column=1, padx=40, pady=20, sticky=W)
 
         # Positions of the checkboxes.
         self.__wi_fi_checkbox.grid(row=4, column=1, padx=40, sticky=W)
         self.__ac_checkbox.grid(row=4, column=1, padx=10)
         self.__bar_checkbox.grid(row=5, column=1, padx=40, sticky=W)
-        self.__restaurant_checkbox.grid(row=5, column=1, padx=10)
-        self.__pets_checkbox.grid(row=5, column=1, padx=10, sticky=E)
+        self.__restaurant_checkbox.grid(row=5, column=1, padx=135, sticky=W)
+        self.__pets_checkbox.grid(row=5, column=1, padx=40, sticky=E)
 
         # Position of the search button.
         self.__search_btn.grid(row=7, column=1, padx=70, pady=30, sticky=W)
