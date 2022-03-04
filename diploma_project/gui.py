@@ -123,6 +123,10 @@ class GUI():
     """Database abstraction.
     """
 
+    __chosen_language = "english"
+    """Chosen language from the main form. English by default.
+    """
+
 # End region attributes.
 
 # Region constructor.
@@ -148,10 +152,58 @@ class GUI():
         self.__root.mainloop()
 
     def __change_language_eng(self):
-        pass
+        """Method to change the language to English.
+        """
+
+        self.__chosen_language = "english"
+
+        self.__root.title("Hotel finder")
+
+        self.__main_label.config(text="Looking for a hotel?\nYou are at the right place!")
+        self.__name_label.config(text="Name:")
+        self.__city_label.config(text="City:")
+        self.__city_combobox['values'] = ['Burgas', 'Dobrich', 'Lovech', 'Montana', 'Pleven', 'Plovdiv', 'Razgrad', 'Ruse',
+                                            'Shumen', 'Silistra', 'Sliven', 'Sofia', 'Stara Zagora', 'Svishtov', 'Targovishte', 'Varna', 'Veliko Turnovo', 'Vraca']
+        self.__stars_label.config(text="Stars:")
+        self.__amenities_label.config(text="Amenities:")
+        self.__price_label.config(text="Price up to:")
+
+        self.__wi_fi_checkbox.config(text="Wi-fi")
+        self.__ac_checkbox.config(text="Air Conditioner")
+        self.__ac_checkbox.grid(row=4, column=1, padx=10)
+        self.__bar_checkbox.config(text="Bar")
+        self.__restaurant_checkbox.config(text="Restaurant")
+        self.__pets_checkbox.config(text="Allow Pets")
+
+        self.__price_combobox['values'] = ["Up to 30 BGN", "31-50 BGN", "51-70 BGN", "71-100 BGN", "More than 100 BGN"]
+
+        self.__search_btn.config(text="Search")
 
     def __change_language_bul(self):
-        pass
+        """Method to change the language to Bulgarian.
+        """
+
+        self.__chosen_language = "bulgarian"
+
+        self.__main_label.config(text="Търсите хотел?\nВие сте на правилното място!")
+        self.__name_label.config(text="Име:")
+        self.__city_label.config(text="Град:")
+        self.__city_combobox['values'] = ['Бургас', 'Варна', 'Велико Търново', 'Враца', 'Добрич', 'Ловеч', 'Монтана', 'Плевен', 'Пловдив', 'Разград', 'Русе',
+                                            'Свищов', 'Силистра', 'Сливен', 'София', 'Стара Загора', 'Търговище', 'Шумен']
+        self.__stars_label.config(text="Звезди:")
+        self.__amenities_label.config(text="Удобства:")
+        self.__price_label.config(text="Цена до:")
+
+        self.__wi_fi_checkbox.config(text="Интернет")
+        self.__ac_checkbox.config(text="Климатик")
+        self.__ac_checkbox.grid(row=4, column=1, padx=(0,30))
+        self.__bar_checkbox.config(text="Бар")
+        self.__restaurant_checkbox.config(text="Ресторант")
+        self.__pets_checkbox.config(text="С дом. любимци")
+
+        self.__price_combobox['values'] = ["До 30 лева", "31-50 лева", "51-70 лева", "71-100 лева", "Над 100 лева"]
+
+        self.__search_btn.config(text="Търсене")
 
     def __onreturn_main(self, event):
         """When on main form, calls searchdb_command method on 'Return' button click.
@@ -183,6 +235,8 @@ class GUI():
 
         # Set window name.
         self.__root.title("Hotel finder")
+        if self.__chosen_language != "english":
+            self.__root.title("Търсене на хотели")
 
         # Prevents resizing.
         self.__root.resizable(False, False)
@@ -211,7 +265,7 @@ class GUI():
         self.__city_label = tk.Label(self.__root, text="City:", fg="white", bg="#1C86EE", font=("Courier", 10))
         self.__stars_label = tk.Label(self.__root, text="Stars:", fg="white", bg="#1C86EE", font=("Courier", 10))
         self.__amenities_label = tk.Label(self.__root, text="Amenities:", fg="white", bg="#1C86EE", font=("Courier", 10))
-        self.__price_label = tk.Label(self.__root, text="Price:", fg="white", bg="#1C86EE", font=("Courier", 10))
+        self.__price_label = tk.Label(self.__root, text="Price up to:", fg="white", bg="#1C86EE", font=("Courier", 10))
 
         # Create the entry in the main form.
         self.__name_entry = tk.Entry(self.__root, width=28)
@@ -268,6 +322,8 @@ class GUI():
 
         _root_results = Toplevel(self.__root)
         _root_results.title("Search results")
+        if self.__chosen_language != "english":
+            _root_results.title("Резултати от търсенето")
         _root_results.resizable(False, False)
 
         _root_results_width = 750
@@ -308,8 +364,12 @@ class GUI():
         _frame_on_canvas.columnconfigure(1, weight=2)
         _frame_on_canvas.columnconfigure(2, weight=1)
 
-        _main_label = Label(_frame_on_canvas, text="Results", fg="white", bg="#1C86EE", font=("arial", 20))
-        _main_label.grid(row=0, column=1, padx=112, pady=(0,20), sticky=E)
+        if self.__chosen_language == "english":
+            _main_label = Label(_frame_on_canvas, text="Results", fg="white", bg="#1C86EE", font=("arial", 20))
+            _main_label.grid(row=0, column=1, padx=112, pady=(0,20), sticky=E)
+        else:
+            _main_label = Label(_frame_on_canvas, text="Намерени хотели", fg="white", bg="#1C86EE", font=("arial", 20))
+            _main_label.grid(row=0, column=1, padx=(0,45), pady=(0,20), sticky=E)
 
         row_counter = 1
 
