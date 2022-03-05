@@ -248,9 +248,9 @@ class GUI():
         # Place the window in the center of the screen.
         _screen_width = self.__root.winfo_screenwidth()
         _screen_height = self.__root.winfo_screenheight()
-        _x_cordinate = int((_screen_width/2) - (_root_width/2))
-        _y_cordinate = int((_screen_height/2) - (_root_height/2))
-        self.__root.geometry("{}x{}+{}+{}".format(_root_width, _root_height, _x_cordinate, _y_cordinate))
+        _x_coordinate = int((_screen_width/2) - (_root_width/2))
+        _y_coordinate = int((_screen_height/2) - (_root_height/2))
+        self.__root.geometry("{}x{}+{}+{}".format(_root_width, _root_height, _x_coordinate, _y_coordinate))
 
         # Set window background colour.
         self.__root.configure(bg="#1C86EE")
@@ -331,9 +331,9 @@ class GUI():
 
         _screen_width = _root_results.winfo_screenwidth()
         _screen_height = _root_results.winfo_screenheight()
-        _x_cordinate = int((_screen_width/2) - (_root_results_width/2))
-        _y_cordinate = int((_screen_height/2) - (_root_results_height/2))
-        _root_results.geometry("{}x{}+{}+{}".format(_root_results_width, _root_results_height, _x_cordinate, _y_cordinate))
+        _x_coordinate = int((_screen_width/2) - (_root_results_width/2))
+        _y_coordinate = int((_screen_height/2) - (_root_results_height/2))
+        _root_results.geometry("{}x{}+{}+{}".format(_root_results_width, _root_results_height, _x_coordinate, _y_coordinate))
 
         _root_results.configure(bg="#1C86EE")
 
@@ -379,8 +379,51 @@ class GUI():
             # For star emoji:
             star = emoji.emojize(":star:")
 
+            'Stara Zagora', 'Svishtov', 'Targovishte', 'Varna', 'Veliko Turnovo', 'Vraca'
+
             # Starting message.
-            msg = f'''\n     City: {hotel["Town"]}\n     Name: {hotel["Hotel"]}\n     Stars: '''
+            if self.__chosen_language == "english":
+                msg = f'''\n     City: {hotel["Town"]}\n     Name: {hotel["Hotel"]}\n     Stars: '''
+            else:
+                # Change the name of the towns to Bulgarian if thats the chosen language.
+                if hotel["Town"] == "Burgas":
+                    hotel["Town"] = "Бургас"
+                if hotel["Town"] == "Dobrich":
+                    hotel["Town"] = "Добрич"
+                if hotel["Town"] == "Lovech":
+                    hotel["Town"] = "Ловеч"
+                if hotel["Town"] == "Montana":
+                    hotel["Town"] = "Монтана"
+                if hotel["Town"] == "Pleven":
+                    hotel["Town"] = "Плевен"
+                if hotel["Town"] == "Plovdiv":
+                    hotel["Town"] = "Пловдив"
+                if hotel["Town"] == "Razgrad":
+                    hotel["Town"] = "Разград"
+                if hotel["Town"] == "Ruse":
+                    hotel["Town"] = "Русе"
+                if hotel["Town"] == "Shumen":
+                    hotel["Town"] = "Шумен"
+                if hotel["Town"] == "Silistra":
+                    hotel["Town"] = "Силистра"
+                if hotel["Town"] == "Sliven":
+                    hotel["Town"] = "Сливен"
+                if hotel["Town"] == "Sofia":
+                    hotel["Town"] = "София"
+                if hotel["Town"] == "Stara Zagora":
+                    hotel["Town"] = "Стара Загора"
+                if hotel["Town"] == "Svishtov":
+                    hotel["Town"] = "Свищов"
+                if hotel["Town"] == "Targovishte":
+                    hotel["Town"] = "Търговище"
+                if hotel["Town"] == "Varna":
+                    hotel["Town"] = "Варна"
+                if hotel["Town"] == "Veliko Turnovo":
+                    hotel["Town"] = "Велико Търново"
+                if hotel["Town"] == "Vraca":
+                    hotel["Town"] = "Враца"
+                msg = f'''\n     Град: {hotel["Town"]}\n     Име: {hotel["Hotel"]}\n     Звезди: '''
+
             stars_msg = ""
 
             # Add number of stars equal to the star rating of the hotel.
@@ -390,48 +433,82 @@ class GUI():
             price_msg = hotel["Price"]
 
             # Concatenate strings.
-            message = msg + stars_msg + f"\n     Price: {price_msg} BGN"
+            if self.__chosen_language == "english":
+                message = msg + stars_msg + f"\n     Price: {price_msg} BGN"
+            else:
+                message = msg + stars_msg + f"\n     Цена: {price_msg} лева"
 
             # Concatenate string with wi-fi.
             if hotel["Wi-fi"] == True:
-                wi_fi_msg = "\n     Wi-fi: Yes"
+                if self.__chosen_language == "english":
+                    wi_fi_msg = "\n     Wi-fi: Yes"
+                else:
+                    wi_fi_msg = "\n     Интернет: Да"
                 message = message + wi_fi_msg
             else:
-                wi_fi_msg = "\n     Wi-fi: No"
+                if self.__chosen_language == "english":
+                    wi_fi_msg = "\n     Wi-fi: No"
+                else:
+                    wi_fi_msg = "\n     Интернет: Не"
                 message = message + wi_fi_msg
 
             # Concatenate string with air conditioner.
             if hotel["Air Conditioner"] == True:
-                ac_msg = "\n     Air conditioner: Yes"
+                if self.__chosen_language == "english":
+                    ac_msg = "\n     Air conditioner: Yes"
+                else:
+                    ac_msg = "\n     Климатик: Да"
                 message = message + ac_msg
             else:
-                ac_msg = "\n     Air conditioner: No"
+                if self.__chosen_language == "english":
+                    ac_msg = "\n     Air conditioner: No"
+                else:
+                    ac_msg = "\n     Климатик: Не"
                 message = message + ac_msg
 
             # Concatenate string with bar.
             if hotel["Bar"] == True:
-                bar_msg = "\n     Bar: Yes"
+                if self.__chosen_language == "english":
+                    bar_msg = "\n     Bar: Yes"
+                else:
+                    bar_msg = "\n     Бар: Да"
                 message = message + bar_msg
             else:
-                bar_msg = "\n     Bar: No"
+                if self.__chosen_language == "english":
+                    bar_msg = "\n     Bar: No"
+                else:
+                    bar_msg = "\n     Бар: Не"
                 message = message + bar_msg
 
             # Concatenate string with restaurant.
             if hotel["Restaurant"] == True:
-                restaurant_msg = "\n     Restaurant: Yes"
+                if self.__chosen_language == "english":
+                    restaurant_msg = "\n     Restaurant: Yes"
+                else:
+                    restaurant_msg = "\n     Ресторант: Да"
                 message = message + restaurant_msg
             else:
-                restaurant_msg = "\n     Restaurant: No"
+                if self.__chosen_language == "english":
+                    restaurant_msg = "\n     Restaurant: No"
+                else:
+                    restaurant_msg = "\n     Ресторант: Не"
                 message = message + restaurant_msg
 
             # Concatenate string with pets.
             if hotel["Allow Pets"] == True:
-                pets_msg = "\n     Allow pets: Yes"
+                if self.__chosen_language == "english":
+                    pets_msg = "\n     Allow pets: Yes"
+                else:
+                    pets_msg = "\n     С дом. любимци: Да"
                 message = message + pets_msg
             else:
-                pets_msg = "\n     Allow pets: No"
+                if self.__chosen_language == "english":
+                    pets_msg = "\n     Allow pets: No"
+                else:
+                    pets_msg = "\n     С дом. любимци: Не"
                 message = message + pets_msg
 
+            # Create and fill the text boxes with the found hotels.
             _text_box = Text(_frame_on_canvas, height=11, width=32, font=("Courier", 10, "italic"))
             _text_box.grid(row=row_counter, padx=30, pady=10, column=1, sticky=E)
             _text_box.insert('end', message)
@@ -439,33 +516,59 @@ class GUI():
             _text_box.config(state='disabled')
 
             # Change color of stars.
-            _text_box.tag_add("star", "4.11", "4.17")
+            _text_box.tag_add("star", "4.12", "4.18")
             _text_box.tag_config("star", background="white", foreground="red")
 
-            _reserve_btn = tk.Button(
-            _frame_on_canvas,
-            text="Reserve a room",
-            font="Helvetica 9 bold",
-            width=18,
-            height=2,
-            fg="black",
-            bg="white",
-            # Use partial to be able to pass the hotel name variable.
-            command=partial(self.__reserve_room_form, hotel_name=hotel["Hotel"], results_form=_root_results))
+            if self.__chosen_language == "english":
+                _reserve_btn = tk.Button(
+                _frame_on_canvas,
+                text="Reserve a room",
+                font="Helvetica 9 bold",
+                width=18,
+                height=2,
+                fg="black",
+                bg="white",
+                # Use partial to be able to pass the hotel name variable.
+                command=partial(self.__reserve_room_form, hotel_name=hotel["Hotel"], results_form=_root_results))
 
-            _reserve_btn.grid(row=row_counter, column=2, padx=(0,30), pady=50, sticky=NW)
+                _reserve_btn.grid(row=row_counter, column=2, padx=(0,30), pady=50, sticky=NW)
 
-            _review_btn = tk.Button(
-            _frame_on_canvas,
-            text="Leave a review",
-            font="Helvetica 9 bold",
-            width=18,
-            height=2,
-            fg="black",
-            bg="white",
-            command=partial(self.__review_form, city=hotel["Town"], hotel_name=hotel["Hotel"], results_form=_root_results))
+                _review_btn = tk.Button(
+                _frame_on_canvas,
+                text="Leave a review",
+                font="Helvetica 9 bold",
+                width=18,
+                height=2,
+                fg="black",
+                bg="white",
+                command=partial(self.__review_form, city=hotel["Town"], hotel_name=hotel["Hotel"], results_form=_root_results))
 
-            _review_btn.grid(row=row_counter, column=2, padx=(0,30), pady=(120,0), sticky=NW)
+                _review_btn.grid(row=row_counter, column=2, padx=(0,30), pady=(120,0), sticky=NW)
+            else:
+                _reserve_btn = tk.Button(
+                _frame_on_canvas,
+                text="Резервиране на стая",
+                font="Helvetica 9 bold",
+                width=18,
+                height=2,
+                fg="black",
+                bg="white",
+                # Use partial to be able to pass the hotel name variable.
+                command=partial(self.__reserve_room_form, hotel_name=hotel["Hotel"], results_form=_root_results))
+
+                _reserve_btn.grid(row=row_counter, column=2, padx=(0,30), pady=50, sticky=NW)
+
+                _review_btn = tk.Button(
+                _frame_on_canvas,
+                text="Дайте мнение",
+                font="Helvetica 9 bold",
+                width=18,
+                height=2,
+                fg="black",
+                bg="white",
+                command=partial(self.__review_form, city=hotel["Town"], hotel_name=hotel["Hotel"], results_form=_root_results))
+
+                _review_btn.grid(row=row_counter, column=2, padx=(0,30), pady=(120,0), sticky=NW)
 
             row_counter += 1
 
@@ -489,9 +592,9 @@ class GUI():
 
         _screen_width = _root_reservation.winfo_screenwidth()
         _screen_height = _root_reservation.winfo_screenheight()
-        _x_cordinate = int((_screen_width/2) - (_root_reservation_width/2))
-        _y_cordinate = int((_screen_height/2) - (_root_reservation_height/2))
-        _root_reservation.geometry("{}x{}+{}+{}".format(_root_reservation_width, _root_reservation_height, _x_cordinate, _y_cordinate))
+        _x_coordinate = int((_screen_width/2) - (_root_reservation_width/2))
+        _y_coordinate = int((_screen_height/2) - (_root_reservation_height/2))
+        _root_reservation.geometry("{}x{}+{}+{}".format(_root_reservation_width, _root_reservation_height, _x_coordinate, _y_coordinate))
 
         # Focus the newly created form.
         _root_reservation.after(1, lambda: _root_reservation.focus_force())
@@ -678,9 +781,9 @@ class GUI():
 
         _screen_width = _root_review.winfo_screenwidth()
         _screen_height = _root_review.winfo_screenheight()
-        _x_cordinate = int((_screen_width/2) - (_root_review_width/2))
-        _y_cordinate = int((_screen_height/2) - (_root_review_height/2))
-        _root_review.geometry("{}x{}+{}+{}".format(_root_review_width, _root_review_height, _x_cordinate, _y_cordinate))
+        _x_coordinate = int((_screen_width/2) - (_root_review_width/2))
+        _y_coordinate = int((_screen_height/2) - (_root_review_height/2))
+        _root_review.geometry("{}x{}+{}+{}".format(_root_review_width, _root_review_height, _x_coordinate, _y_coordinate))
 
         # Configure the grid.
         _root_review.columnconfigure(0, weight=1)
@@ -814,17 +917,21 @@ class GUI():
 
         __user_preferences = self.__user_preferences()
 
-        # Call Database class.
-        self.__database = Database(__user_preferences)
-        _found_hotels = self.__database.found_hotels
-
-        # If the _found_hotels dict is not empty to create a results form and populate it with them.
-        if _found_hotels:
-            # Create a results form with the found hotels.
-            self.__results_form(found_hotels=_found_hotels)
-        # If it is empty to show a pop up message.
+        # Check if there are wrong user inputs.
+        if __user_preferences["Star Rating"] == "error":
+            pass
         else:
-            messagebox.showerror("No hotels found", f"No hotels found for your preferences. Please try again.")
+            # Call Database class.
+            self.__database = Database(__user_preferences)
+            _found_hotels = self.__database.found_hotels
+
+            # If the _found_hotels dict is not empty to create a results form and populate it with them.
+            if _found_hotels:
+                # Create a results form with the found hotels.
+                self.__results_form(found_hotels=_found_hotels)
+            # If it is empty to show a pop up message.
+            else:
+                messagebox.showerror("No hotels found", f"No hotels found for your preferences. Please try again.")
 
     def __positioning(self):
         """Method to adjust the positioning of the labels, entries and buttons in the main form.
@@ -895,8 +1002,12 @@ class GUI():
             __searchdb_dict["Town"] = __city_input
 
         if __stars_input != "":
-            __stars_input = int(__stars_input)
-            __searchdb_dict["Star Rating"] = __stars_input
+            try:
+                __stars_input = int(__stars_input)
+                __searchdb_dict["Star Rating"] = __stars_input
+            except:
+                __searchdb_dict["Star Rating"] = "error"
+                messagebox.showerror("Something went wrong", f"Please enter valid values.")
 
         # Check if the checkboxes are checked.
         if self.__wi_fi_var.get() == True:

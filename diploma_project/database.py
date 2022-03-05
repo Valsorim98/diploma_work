@@ -3,6 +3,7 @@
 
 from pymongo import MongoClient
 import certifi
+from tkinter import messagebox
 
 class Database():
     """Class database.
@@ -74,6 +75,9 @@ class Database():
         # Prints all hotels in the town from user preferences.
         for hotel in _read_collection:
 
+            # Flag to stop searching after first attempt if wrong input is given.
+            stop_searching = False
+
             # Create dict with the given preferences to search in the database.
             __searchdb = {}
 
@@ -139,7 +143,7 @@ class Database():
 
                 elif key == "Price":
 
-                    if value == "Up to 30 BGN":
+                    if (value == "Up to 30 BGN") or (value == "До 30 лева"):
                         if hotel["Price"] <= 30:
                             _suitable_hotel = True
 
@@ -147,7 +151,7 @@ class Database():
                             _suitable_hotel = False
                             break
 
-                    elif value == "31-50 BGN":
+                    elif (value == "31-50 BGN") or (value == "31-50 лева"):
                         if hotel["Price"] >= 31 and hotel["Price"] <= 50:
                             _suitable_hotel = True
 
@@ -155,7 +159,7 @@ class Database():
                             _suitable_hotel = False
                             break
 
-                    elif value == "51-70 BGN":
+                    elif (value == "51-70 BGN") or (value == "51-70 лева"):
                         if hotel["Price"] >= 51 and hotel["Price"] <= 70:
                             _suitable_hotel = True
 
@@ -163,7 +167,7 @@ class Database():
                             _suitable_hotel = False
                             break
 
-                    elif value == "71-100 BGN":
+                    elif (value == "71-100 BGN") or (value == "71-100 лева"):
                         if hotel["Price"] >= 71 and hotel["Price"] <= 100:
                             _suitable_hotel = True
 
@@ -171,7 +175,7 @@ class Database():
                             _suitable_hotel = False
                             break
 
-                    elif value == "More than 100 BGN":
+                    elif (value == "More than 100 BGN") or (value == "Над 100 лева"):
                         if hotel["Price"] > 100:
                             _suitable_hotel = True
 
@@ -181,18 +185,28 @@ class Database():
 
                     # If the input price is different from the options in the dropdown menu, to look for hotels up to the given price.
                     else:
-                        # Convert string to int.
-                        hotel_price = int(__searchdb["Price"])
+                        # Try-catch to check if price input is wrong value.
+                        try:
+                            # Convert string to int.
+                            hotel_price = int(__searchdb["Price"])
 
-                        if hotel["Price"] <= hotel_price:
-                            _suitable_hotel = True
+                            if hotel["Price"] <= hotel_price:
+                                _suitable_hotel = True
 
-                        else:
-                            _suitable_hotel = False
+                            else:
+                                _suitable_hotel = False
+                        except:
+                            # Stop searching if wrong price input is given.
+                            stop_searching = True
+                            break
 
                 else:
                     _suitable_hotel = False
                     break
+
+            # Stop searching if wrong input is given.
+            if stop_searching == True:
+                break
 
             # Print only the hotels that coincide with all the user preferences and append them to found_hotels dict.
             if _suitable_hotel == True:
