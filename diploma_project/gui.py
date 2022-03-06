@@ -186,7 +186,7 @@ class GUI():
         self.__chosen_language = "bulgarian"
 
         self.__main_label.config(text="Търсите хотел?\nВие сте на правилното място!")
-        self.__name_label.config(text="Име:")
+        self.__name_label.config(text="           Име:")
         self.__city_label.config(text="Град:")
         self.__city_combobox['values'] = ['Бургас', 'Варна', 'Велико Търново', 'Враца', 'Добрич', 'Ловеч', 'Монтана', 'Плевен', 'Пловдив', 'Разград', 'Русе',
                                             'Свищов', 'Силистра', 'Сливен', 'София', 'Стара Загора', 'Търговище', 'Шумен']
@@ -260,12 +260,12 @@ class GUI():
         self.__bul_button = tk.Button(self.__root, text='Български', command=self.__change_language_bul)
 
         # Create the labels in the main form.
-        self.__main_label = tk.Label(text="Looking for a hotel?\nYou are at the right place!", fg="white", bg="#1C86EE", font=("Courier", 12))
-        self.__name_label = tk.Label(self.__root, text="Name:", fg="white", bg="#1C86EE", font=("Courier", 10))
-        self.__city_label = tk.Label(self.__root, text="City:", fg="white", bg="#1C86EE", font=("Courier", 10))
-        self.__stars_label = tk.Label(self.__root, text="Stars:", fg="white", bg="#1C86EE", font=("Courier", 10))
-        self.__amenities_label = tk.Label(self.__root, text="Amenities:", fg="white", bg="#1C86EE", font=("Courier", 10))
-        self.__price_label = tk.Label(self.__root, text="Price up to:", fg="white", bg="#1C86EE", font=("Courier", 10))
+        self.__main_label = tk.Label(text="Looking for a hotel?\nYou are at the right place!", fg="white", bg="#1C86EE", font=("Courier", 14))
+        self.__name_label = tk.Label(self.__root, text="Name:", fg="white", bg="#1C86EE", font=("Courier", 11))
+        self.__city_label = tk.Label(self.__root, text="City:", fg="white", bg="#1C86EE", font=("Courier", 11))
+        self.__stars_label = tk.Label(self.__root, text="Stars:", fg="white", bg="#1C86EE", font=("Courier", 11))
+        self.__amenities_label = tk.Label(self.__root, text="Amenities:", fg="white", bg="#1C86EE", font=("Courier", 11))
+        self.__price_label = tk.Label(self.__root, text="Price up to:", fg="white", bg="#1C86EE", font=("Courier", 11))
 
         # Create the entry in the main form.
         self.__name_entry = tk.Entry(self.__root, width=28)
@@ -584,7 +584,10 @@ class GUI():
         """
 
         _root_reservation = Toplevel(self.__root, bg="#1C86EE")
-        _root_reservation.title("Reservation")
+        if self.__chosen_language == "english":
+            _root_reservation.title("Reservation")
+        else:
+            _root_reservation.title("Резервация")
         _root_reservation.resizable(False, False)
 
         _root_reservation_width = 600
@@ -607,7 +610,11 @@ class GUI():
         _root_reservation.columnconfigure(1, weight=1)
         _root_reservation.columnconfigure(2, weight=1)
 
-        _main_label = Label(_root_reservation, text="Select accommodation date", fg="white", bg="#1C86EE", font=("Courier", 16))
+        if self.__chosen_language == "english":
+            _main_label = Label(_root_reservation, text="Select accommodation date", fg="white", bg="#1C86EE", font=("Courier", 16))
+        else:
+            _main_label = Label(_root_reservation, text="Изберете дата за настаняване", fg="white", bg="#1C86EE", font=("Courier", 16))
+
         _main_label.grid(row=0, column=1, padx=20, pady=(60,0))
 
         # Get current date.
@@ -622,36 +629,64 @@ class GUI():
                day = _current_day, date_pattern="dd-mm-yyyy")
         _cal.grid(row=1, column=1, padx=20, pady=(40,0))
 
-        _name_reservation_label = Label(_root_reservation, text="Enter name for reservation:", fg="white", bg="#1C86EE", font=("Courier", 14))
-        _name_reservation_label.grid(row=2, column=1, padx=(0,95), pady=(25,0))
+        if self.__chosen_language == "english":
+            _name_reservation_label = Label(_root_reservation, text="Enter name for reservation:", fg="white", bg="#1C86EE", font=("Courier", 14))
+        else:
+            _name_reservation_label = Label(_root_reservation, text="Въведете име за резервация:", fg="white", bg="#1C86EE", font=("Courier", 14))
+
+        _name_reservation_label.grid(row=2, column=1, padx=(0,105), pady=(25,0))
 
         _name_entry = Entry(_root_reservation, width=20)
         _name_entry.grid(row=2, column=1, padx=(350,0), pady=(25,0))
 
-        _room_cap_label = Label(_root_reservation, text="Reserve a room for        people.", fg="white", bg="#1C86EE", font=("Courier", 14))
+        if self.__chosen_language == "english":
+            _room_cap_label = Label(_root_reservation, text="Reserve a room for        people.", fg="white", bg="#1C86EE", font=("Courier", 14))
+            _room_cap_combobox = Combobox(_root_reservation, width=8)
+            _room_cap_combobox['values'] = [1, 2, 3, 4]
+            _room_cap_combobox.grid(row=3,column=1, padx=(80,0), pady=(25,0))
+        else:
+            _room_cap_label = Label(_root_reservation, text="Резервирайте стая за        души.", fg="white", bg="#1C86EE", font=("Courier", 14))
+            _room_cap_combobox = Combobox(_root_reservation, width=8)
+            _room_cap_combobox['values'] = [1, 2, 3, 4]
+            _room_cap_combobox.grid(row=3,column=1, padx=(125,0), pady=(25,0))
+
         _room_cap_label.grid(row=3, column=1, padx=(0,40), pady=(25,0))
 
-        _room_cap_combobox = Combobox(_root_reservation, width=8)
-        _room_cap_combobox['values'] = [1, 2, 3, 4]
-        _room_cap_combobox.grid(row=3,column=1, padx=(80,0), pady=(25,0))
+        if self.__chosen_language == "english":
+            _days_label = Label(_root_reservation, text="I would like to stay for        days.", fg="white", bg="#1C86EE", font=("Courier", 14))
+            _days_label.grid(row=4, column=1, pady=(25,0))
+            _days_combobox = Combobox(_root_reservation, width=8)
+            _days_combobox['values'] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+            _days_combobox.grid(row=4, column=1, padx=(215,0), pady=(25,0))
+        else:
+            _days_label = Label(_root_reservation, text="Бих желал да остана за        дни.", fg="white", bg="#1C86EE", font=("Courier", 14))
+            _days_label.grid(row=4, column=1, padx=(0,25), pady=(25,0))
+            _days_combobox = Combobox(_root_reservation, width=8)
+            _days_combobox['values'] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+            _days_combobox.grid(row=4, column=1, padx=(175,0), pady=(25,0))
 
-        _days_label = Label(_root_reservation, text="I would like to stay for        days.", fg="white", bg="#1C86EE", font=("Courier", 14))
-        _days_label.grid(row=4, column=1, pady=(25,0))
-
-        _days_combobox = Combobox(_root_reservation, width=8)
-        _days_combobox['values'] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-        _days_combobox.grid(row=4, column=1, padx=(215,0), pady=(25,0))
-
-        _reserve_btn = Button(
-            _root_reservation,
-            text="Reserve",
-            font="Helvetica 9 bold",
-            width=15,
-            height=2,
-            fg="black",
-            bg="white",
-            command=partial(self.__reserve_room_command, calendar=_cal, hotel_name=hotel_name, name_entry=_name_entry, room_capacity=_room_cap_combobox,
-                            days_entered=_days_combobox, reservation_form=_root_reservation))
+        if self.__chosen_language == "english":
+            _reserve_btn = Button(
+                _root_reservation,
+                text="Reserve",
+                font="Helvetica 9 bold",
+                width=15,
+                height=2,
+                fg="black",
+                bg="white",
+                command=partial(self.__reserve_room_command, calendar=_cal, hotel_name=hotel_name, name_entry=_name_entry, room_capacity=_room_cap_combobox,
+                                days_entered=_days_combobox, reservation_form=_root_reservation))
+        else:
+            _reserve_btn = Button(
+                _root_reservation,
+                text="Резервиране",
+                font="Helvetica 9 bold",
+                width=15,
+                height=2,
+                fg="black",
+                bg="white",
+                command=partial(self.__reserve_room_command, calendar=_cal, hotel_name=hotel_name, name_entry=_name_entry, room_capacity=_room_cap_combobox,
+                                days_entered=_days_combobox, reservation_form=_root_reservation))
 
         _reserve_btn.grid(row=5, column=1, pady=(25,0))
 
@@ -956,22 +991,22 @@ class GUI():
         self.__price_label.grid(row=6, column=0, pady=20, sticky=E)
 
         # Position of the entry.
-        self.__name_entry.grid(row=1, column=1, padx=40, sticky=W)
+        self.__name_entry.grid(row=1, column=1, padx=50, sticky=W)
 
         # Positions of the comboboxes.
-        self.__city_combobox.grid(row=2, column=1, padx=40, sticky=W)
-        self.__stars_combobox.grid(row=3, column=1, padx=40, sticky=W)
-        self.__price_combobox.grid(row=6, column=1, padx=40, pady=20, sticky=W)
+        self.__city_combobox.grid(row=2, column=1, padx=50, sticky=W)
+        self.__stars_combobox.grid(row=3, column=1, padx=50, sticky=W)
+        self.__price_combobox.grid(row=6, column=1, padx=50, pady=20, sticky=W)
 
         # Positions of the checkboxes.
         self.__wi_fi_checkbox.grid(row=4, column=1, padx=40, sticky=W)
         self.__ac_checkbox.grid(row=4, column=1, padx=10)
         self.__bar_checkbox.grid(row=5, column=1, padx=40, sticky=W)
-        self.__restaurant_checkbox.grid(row=5, column=1, padx=135, sticky=W)
+        self.__restaurant_checkbox.grid(row=5, column=1, padx=143, sticky=W)
         self.__pets_checkbox.grid(row=5, column=1, padx=40, sticky=E)
 
         # Position of the search button.
-        self.__search_btn.grid(row=7, column=1, padx=70, pady=30, sticky=W)
+        self.__search_btn.grid(row=7, column=1, padx=80, pady=30, sticky=W)
 
     def __user_preferences(self):
         """Method to get the user preferences from the main GUI form and store them in a dictionary.
