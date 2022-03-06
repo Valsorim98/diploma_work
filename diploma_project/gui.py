@@ -999,9 +999,9 @@ class GUI():
         self.__price_combobox.grid(row=6, column=1, padx=50, pady=20, sticky=W)
 
         # Positions of the checkboxes.
-        self.__wi_fi_checkbox.grid(row=4, column=1, padx=40, sticky=W)
+        self.__wi_fi_checkbox.grid(row=4, column=1, padx=45, sticky=W)
         self.__ac_checkbox.grid(row=4, column=1, padx=10)
-        self.__bar_checkbox.grid(row=5, column=1, padx=40, sticky=W)
+        self.__bar_checkbox.grid(row=5, column=1, padx=45, sticky=W)
         self.__restaurant_checkbox.grid(row=5, column=1, padx=143, sticky=W)
         self.__pets_checkbox.grid(row=5, column=1, padx=40, sticky=E)
 
