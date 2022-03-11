@@ -792,7 +792,6 @@ class GUI():
                     reservation_form.after(1, lambda: reservation_form.focus_force())
                     break
             _name_entered = _name_entered.lower().title()
-            #if (_room_cap != "") and (_days_of_stay != ""):
             _room_cap = int(_room_cap)
             _days_of_stay = int(_days_of_stay)
             if (_days_of_stay != "" and _days_of_stay >= 1 and _days_of_stay <= 14 and
