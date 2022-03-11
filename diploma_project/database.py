@@ -3,7 +3,6 @@
 
 from pymongo import MongoClient
 import certifi
-from tkinter import messagebox
 
 class Database():
     """Class database.
