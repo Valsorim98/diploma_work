@@ -235,6 +235,7 @@ class GUI():
 
         # Set window name.
         self.__root.title("Hotel finder")
+
         if self.__chosen_language != "english":
             self.__root.title("Търсене на хотели")
 
@@ -322,8 +323,10 @@ class GUI():
 
         _root_results = Toplevel(self.__root)
         _root_results.title("Search results")
+
         if self.__chosen_language != "english":
             _root_results.title("Резултати от търсенето")
+
         _root_results.resizable(False, False)
 
         _root_results_width = 750
@@ -378,8 +381,6 @@ class GUI():
 
             # For star emoji:
             star = emoji.emojize(":star:")
-
-            'Stara Zagora', 'Svishtov', 'Targovishte', 'Varna', 'Veliko Turnovo', 'Vraca'
 
             # Starting message.
             if self.__chosen_language == "english":
@@ -444,12 +445,14 @@ class GUI():
                     wi_fi_msg = "\n     Wi-fi: Yes"
                 else:
                     wi_fi_msg = "\n     Интернет: Да"
+
                 message = message + wi_fi_msg
             else:
                 if self.__chosen_language == "english":
                     wi_fi_msg = "\n     Wi-fi: No"
                 else:
                     wi_fi_msg = "\n     Интернет: Не"
+
                 message = message + wi_fi_msg
 
             # Concatenate string with air conditioner.
@@ -458,12 +461,14 @@ class GUI():
                     ac_msg = "\n     Air conditioner: Yes"
                 else:
                     ac_msg = "\n     Климатик: Да"
+
                 message = message + ac_msg
             else:
                 if self.__chosen_language == "english":
                     ac_msg = "\n     Air conditioner: No"
                 else:
                     ac_msg = "\n     Климатик: Не"
+
                 message = message + ac_msg
 
             # Concatenate string with bar.
@@ -472,12 +477,14 @@ class GUI():
                     bar_msg = "\n     Bar: Yes"
                 else:
                     bar_msg = "\n     Бар: Да"
+
                 message = message + bar_msg
             else:
                 if self.__chosen_language == "english":
                     bar_msg = "\n     Bar: No"
                 else:
                     bar_msg = "\n     Бар: Не"
+
                 message = message + bar_msg
 
             # Concatenate string with restaurant.
@@ -486,12 +493,14 @@ class GUI():
                     restaurant_msg = "\n     Restaurant: Yes"
                 else:
                     restaurant_msg = "\n     Ресторант: Да"
+
                 message = message + restaurant_msg
             else:
                 if self.__chosen_language == "english":
                     restaurant_msg = "\n     Restaurant: No"
                 else:
                     restaurant_msg = "\n     Ресторант: Не"
+
                 message = message + restaurant_msg
 
             # Concatenate string with pets.
@@ -500,12 +509,14 @@ class GUI():
                     pets_msg = "\n     Allow pets: Yes"
                 else:
                     pets_msg = "\n     С дом. любимци: Да"
+
                 message = message + pets_msg
             else:
                 if self.__chosen_language == "english":
                     pets_msg = "\n     Allow pets: No"
                 else:
                     pets_msg = "\n     С дом. любимци: Не"
+
                 message = message + pets_msg
 
             # Create and fill the text boxes with the found hotels.
@@ -584,10 +595,12 @@ class GUI():
         """
 
         _root_reservation = Toplevel(self.__root, bg="#1C86EE")
+
         if self.__chosen_language == "english":
             _root_reservation.title("Reservation")
         else:
             _root_reservation.title("Резервация")
+
         _root_reservation.resizable(False, False)
 
         _root_reservation_width = 600
@@ -781,38 +794,49 @@ class GUI():
                         messagebox.showerror("Something went wrong", f"We were unable to reserve a room for hotel {_hotel_name}.\nPlease enter valid values.")
                     else:
                         messagebox.showerror("Нещо се обърка", f"Не успяхме да резервираме стая за хотел {_hotel_name}.\nМоля, въведете валидни стойности.")
+
                     reservation_form.after(1, lambda: reservation_form.focus_force())
                     _contains_digit = True
                     break
+
                 if _invalid_reserve_date == True:
                     if self.__chosen_language == "english":
                         messagebox.showerror("Invalid date", f"We were unable to reserve a room for hotel {_hotel_name}.\nPlease enter a valid date.")
                     else:
                         messagebox.showerror("Невалидна дата", f"Не успяхме да резервираме стая за хотел {_hotel_name}.\nМоля, въведете валидна дата.")
+
                     reservation_form.after(1, lambda: reservation_form.focus_force())
                     break
+
             _name_entered = _name_entered.lower().title()
             _room_cap = int(_room_cap)
             _days_of_stay = int(_days_of_stay)
+
             if (_days_of_stay != "" and _days_of_stay >= 1 and _days_of_stay <= 14 and
                 _room_cap != "" and _room_cap >= 1 and _room_cap <= 4 and
                 _name_entered != "" and _contains_digit == False and _invalid_reserve_date == False):
                 reservation_form.destroy()
+
                 if self.__chosen_language == "english":
-                    messagebox.showinfo("Reserved", f"Thank you for choosing hotel {_hotel_name}. We are expecting {_name_entered} on {_date}. Time of stay - {_days_of_stay} days.")
+                    messagebox.showinfo("Reserved", f"Thank you for choosing hotel {_hotel_name}. We are expecting {_name_entered} on {_date}. \
+                        Time of stay - {_days_of_stay} days.")
                 else:
-                    messagebox.showinfo("Резервирана е стая", f"Благодарим Ви, че избрахте хотел {_hotel_name}. Очакваме Ви, {_name_entered} на {_date}. Време за престой - {_days_of_stay} дена.")
+                    messagebox.showinfo("Резервирана е стая", f"Благодарим Ви, че избрахте хотел {_hotel_name}. \
+                        Очакваме Ви, {_name_entered} на {_date}. Време за престой - {_days_of_stay} дена.")
+
             if _days_of_stay <= 0 or _days_of_stay >= 15 or _room_cap <= 0 or _room_cap >= 5 or _name_entered == "":
                 if self.__chosen_language == "english":
                     messagebox.showerror("Something went wrong", f"We were unable to reserve a room for hotel {_hotel_name}.\nPlease enter valid values.")
                 else:
                     messagebox.showerror("Нещо се обърка", f"Не успяхме да резервираме стая за хотел {_hotel_name}.\nМоля, въведете валидни стойности.")
+
                 reservation_form.after(1, lambda: reservation_form.focus_force())
         except:
             if self.__chosen_language == "english":
                 messagebox.showerror("Something went wrong", f"We were unable to reserve a room for hotel {_hotel_name}.\nPlease enter valid values.")
             else:
                 messagebox.showerror("Нещо се обърка", f"Не успяхме да резервираме стая за хотел {_hotel_name}.\nМоля, въведете валидни стойности.")
+
             reservation_form.after(1, lambda: reservation_form.focus_force())
 
     def __review_form(self, city, hotel_name, results_form):
@@ -823,10 +847,12 @@ class GUI():
         """
 
         _root_review = Toplevel(self.__root, bg="#1C86EE")
+
         if self.__chosen_language == "english":
             _root_review.title("Leave a review")
         else:
             _root_review.title("Обратна връзка")
+
         _root_review.resizable(False, False)
 
         _root_review_width = 600
@@ -884,6 +910,7 @@ class GUI():
 
         _feedback = Text(_root_review, height=9, width=42, font=("Courier", 12), wrap="word")
         _feedback.grid(row=4, column=1, pady=30)
+
         if self.__chosen_language == "english":
             _feedback.insert(INSERT, "We want to know more for your experience with us.")
         else:
@@ -977,36 +1004,50 @@ class GUI():
                     review_form.after(1, lambda: review_form.focus_force())
                     _contains_digit = True
                     break
+
             _name_entered = _name_entered.lower().title()
             _service_eval = int(_service_eval)
             _food_eval = int(_food_eval)
+
             if _name_entered != "" and _contains_digit == False:
                 review_form.destroy()
-                if _feedback == "We want to know more for your experience with us." or _feedback == "":
+
+                if (_feedback == "We want to know more for your experience with us.") or (_feedback == "Искаме да знаем повече за престоя Ви при нас.") or (_feedback == ""):
                     _review_dict["Additional info"] = "None"
                     self.__database.insert_review(_review_dict)
+
                     if self.__chosen_language == "english":
-                        messagebox.showinfo("Review sent", f"Thank you for your feedback for hotel {_hotel_name}.\nFrom {_name_entered} - service evaluation: {_service_eval}, food evaluation: {_food_eval}, additional information: None.")
+                        messagebox.showinfo("Review sent", f"Thank you for your feedback for hotel {_hotel_name}.\
+                            \nFrom {_name_entered} - service evaluation: {_service_eval}, food evaluation: {_food_eval}, additional information: None.")
                     else:
-                        messagebox.showinfo("Мнението Ви е изпратено", f"Благодарим Ви за вашето мнение за хотел {_hotel_name}.\nОт {_name_entered} - оценка на услугите: {_service_eval}, оценка на храната: {_food_eval}, допълнителна информация: Няма.")
-                if _feedback != "We want to know more for your experience with us.":
-                    _review_dict["Additional info"] = _feedback
-                    self.__database.insert_review(_review_dict)
-                    if self.__chosen_language == "english":
-                        messagebox.showinfo("Review sent", f"Thank you for your feedback for hotel {_hotel_name}.\nFrom {_name_entered} - service evaluation: {_service_eval}, food evaluation: {_food_eval}, additional information: {_feedback}")
-                    else:
-                        messagebox.showinfo("Мнението Ви е изпратено", f"Благодарим Ви за вашето мнение за хотел {_hotel_name}.\nОт {_name_entered} - оценка на услугите: {_service_eval}, оценка на храната: {_food_eval}, допълнителна информация: {_feedback}")
+                        messagebox.showinfo("Мнението Ви е изпратено", f"Благодарим Ви за вашето мнение за хотел {_hotel_name}.\
+                            \nОт {_name_entered} - оценка на услугите: {_service_eval}, оценка на храната: {_food_eval}, допълнителна информация: Няма.")
+
+                if self.__chosen_language == "english":
+                    if (_feedback != "We want to know more for your experience with us."):
+                        _review_dict["Additional info"] = _feedback
+                        self.__database.insert_review(_review_dict)
+                        messagebox.showinfo("Review sent", f"Thank you for your feedback for hotel {_hotel_name}.\
+                                    \nFrom {_name_entered} - service evaluation: {_service_eval}, food evaluation: {_food_eval}, additional information: {_feedback}")
+
+                if self.__chosen_language == "bulgarian":
+                    if (_feedback != "Искаме да знаем повече за престоя Ви при нас."):
+                        messagebox.showinfo("Мнението Ви е изпратено", f"Благодарим Ви за вашето мнение за хотел {_hotel_name}.\
+                                    \nОт {_name_entered} - оценка на услугите: {_service_eval}, оценка на храната: {_food_eval}, допълнителна информация: {_feedback}")
+
             if _name_entered == "":
                 if self.__chosen_language == "english":
                     messagebox.showerror("Something went wrong", f"We were unable to get your review for hotel {_hotel_name}.\nPlease enter your name.")
                 else:
                     messagebox.showerror("Нещо се обърка", f"Не успяхме да въведем вашето мнение за хотел {_hotel_name}.\nМоля, въведете вашето име.")
                 review_form.after(1, lambda: review_form.focus_force())
+
         except:
             if self.__chosen_language == "english":
                 messagebox.showerror("Something went wrong", f"We were unable to get your review for hotel {_hotel_name}.\nPlease try again.")
             else:
                 messagebox.showerror("Нещо се обърка", f"Не успяхме да въведем вашето мнение за хотел {_hotel_name}.\nМоля, опитайте отново.")
+
             review_form.after(1, lambda: review_form.focus_force())
 
     def __searchdb_command(self):
