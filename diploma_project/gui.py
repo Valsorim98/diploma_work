@@ -1143,7 +1143,47 @@ class GUI():
             __searchdb_dict["Name"] = __name_input
 
         if __city_input != "":
-            __searchdb_dict["Town"] = __city_input
+
+            if self.__chosen_language == "english":
+                __searchdb_dict["Town"] = __city_input
+            # If the name of the city is in Bulgarian, to search in the database with its English name.
+            else:
+                if __city_input == "Бургас":
+                    __searchdb_dict["Town"] = "Burgas"
+                if __city_input == "Добрич":
+                    __searchdb_dict["Town"] = "Dobrich"
+                if __city_input == "Ловеч":
+                    __searchdb_dict["Town"] = "Lovech"
+                if __city_input == "Монтана":
+                    __searchdb_dict["Town"] = "Montana"
+                if __city_input == "Плевен":
+                    __searchdb_dict["Town"] = "Pleven"
+                if __city_input == "Пловдив":
+                    __searchdb_dict["Town"] = "Plovdiv"
+                if __city_input == "Разград":
+                    __searchdb_dict["Town"] = "Razgrad"
+                if __city_input == "Русе":
+                    __searchdb_dict["Town"] = "Ruse"
+                if __city_input == "Шумен":
+                    __searchdb_dict["Town"] = "Shumen"
+                if __city_input == "Силистра":
+                    __searchdb_dict["Town"] = "Silistra"
+                if __city_input == "Сливен":
+                    __searchdb_dict["Town"] = "Sliven"
+                if __city_input == "София":
+                    __searchdb_dict["Town"] = "Sofia"
+                if __city_input == "Стара Загора":
+                    __searchdb_dict["Town"] = "Stara Zagora"
+                if __city_input == "Свищов":
+                    __searchdb_dict["Town"] = "Svishtov"
+                if __city_input == "Търговище":
+                    __searchdb_dict["Town"] = "Targovishte"
+                if __city_input == "Варна":
+                    __searchdb_dict["Town"] = "Varna"
+                if __city_input == "Велико Търново":
+                    __searchdb_dict["Town"] = "Veliko Turnovo"
+                if __city_input == "Враца":
+                    __searchdb_dict["Town"] = "Vraca"
 
         if __stars_input != "":
             try:
