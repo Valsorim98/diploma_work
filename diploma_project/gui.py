@@ -783,59 +783,99 @@ class GUI():
                 if _reserve_day < _now_day:
                     _invalid_reserve_date = True
 
-        # Contains digit flag.
-        _contains_digit = False
+        # Invalid input flag.
+        _invalid_input_flag = False
 
         # Check if the entered values from the reserve form are valid.
         try:
             for symbol in _name_entered:
                 if symbol.isdigit():
                     if self.__chosen_language == "english":
-                        messagebox.showerror("Something went wrong", f"We were unable to reserve a room for hotel {_hotel_name}.\nPlease enter valid values.")
+                        _invalid_input_flag = True
+                        break
                     else:
-                        messagebox.showerror("Нещо се обърка", f"Не успяхме да резервираме стая за хотел {_hotel_name}.\nМоля, въведете валидни стойности.")
+                        _invalid_input_flag = True
+                        break
 
-                    reservation_form.after(1, lambda: reservation_form.focus_force())
-                    _contains_digit = True
+            for symbol in _room_cap:
+                if symbol.isalpha():
+                    _invalid_input_flag = True
                     break
 
-                if _invalid_reserve_date == True:
-                    if self.__chosen_language == "english":
-                        messagebox.showerror("Invalid date", f"We were unable to reserve a room for hotel {_hotel_name}.\nPlease enter a valid date.")
-                    else:
-                        messagebox.showerror("Невалидна дата", f"Не успяхме да резервираме стая за хотел {_hotel_name}.\nМоля, въведете валидна дата.")
-
-                    reservation_form.after(1, lambda: reservation_form.focus_force())
+            for symbol in _days_of_stay:
+                if symbol.isalpha():
+                    _invalid_input_flag = True
                     break
 
             _name_entered = _name_entered.lower().title()
             _room_cap = int(_room_cap)
             _days_of_stay = int(_days_of_stay)
 
+            if _days_of_stay <= 0 or _days_of_stay >= 15 or _room_cap <= 0 or _room_cap >= 5 or _name_entered == "":
+                _invalid_input_flag = True
+                reservation_form.after(1, lambda: reservation_form.focus_force())
+
             if (_days_of_stay != "" and _days_of_stay >= 1 and _days_of_stay <= 14 and
                 _room_cap != "" and _room_cap >= 1 and _room_cap <= 4 and
-                _name_entered != "" and _contains_digit == False and _invalid_reserve_date == False):
+                _name_entered != "" and _invalid_input_flag == False and _invalid_reserve_date == False):
                 reservation_form.destroy()
 
                 if self.__chosen_language == "english":
-                    messagebox.showinfo("Reserved", f"Thank you for choosing hotel {_hotel_name}. We are expecting {_name_entered} on {_date}. \
-                        Time of stay - {_days_of_stay} days.")
+                    if _days_of_stay > 1:
+                        messagebox.showinfo("Reserved", f"Thank you for choosing hotel {_hotel_name}.\
+                            \nWe are expecting {_name_entered} on {_date}. Time of stay - {_days_of_stay} days.")
+                    if _days_of_stay == 1:
+                        messagebox.showinfo("Reserved", f"Thank you for choosing hotel {_hotel_name}.\
+                            \nWe are expecting {_name_entered} on {_date}. Time of stay - {_days_of_stay} day.")
                 else:
-                    messagebox.showinfo("Резервирана е стая", f"Благодарим Ви, че избрахте хотел {_hotel_name}. \
-                        Очакваме Ви, {_name_entered} на {_date}. Време за престой - {_days_of_stay} дена.")
+                    if _days_of_stay > 1:
+                        messagebox.showinfo("Резервирана е стая", f"Благодарим Ви, че избрахте хотел {_hotel_name}.\
+                            \nОчакваме Ви, {_name_entered} на {_date}. Време за престой - {_days_of_stay} дена.")
+                    if _days_of_stay == 1:
+                        messagebox.showinfo("Резервирана е стая", f"Благодарим Ви, че избрахте хотел {_hotel_name}.\
+                            \nОчакваме Ви, {_name_entered} на {_date}. Време за престой - {_days_of_stay} ден.")
 
-            if _days_of_stay <= 0 or _days_of_stay >= 15 or _room_cap <= 0 or _room_cap >= 5 or _name_entered == "":
+            # If any invalid input data to show an error.
+            if _invalid_reserve_date == True and _invalid_input_flag == False:
+                if self.__chosen_language == "english":
+                    messagebox.showerror("Invalid date", f"We were unable to reserve a room for hotel {_hotel_name}.\nPlease enter a valid date.")
+                else:
+                    messagebox.showerror("Невалидна дата", f"Не успяхме да резервираме стая за хотел {_hotel_name}.\nМоля, въведете валидна дата.")
+
+            if _invalid_reserve_date == False and _invalid_input_flag == True:
                 if self.__chosen_language == "english":
                     messagebox.showerror("Something went wrong", f"We were unable to reserve a room for hotel {_hotel_name}.\nPlease enter valid values.")
                 else:
                     messagebox.showerror("Нещо се обърка", f"Не успяхме да резервираме стая за хотел {_hotel_name}.\nМоля, въведете валидни стойности.")
 
+            if _invalid_reserve_date == True and _invalid_input_flag == True:
+                if self.__chosen_language == "english":
+                    messagebox.showerror("Something went wrong", f"We were unable to reserve a room for hotel {_hotel_name}.\nPlease enter valid date and values.")
+                else:
+                    messagebox.showerror("Нещо се обърка", f"Не успяхме да резервираме стая за хотел {_hotel_name}.\nМоля, въведете валидни дата и стойности.")
+
+            if _invalid_reserve_date == True or _invalid_input_flag == True:
                 reservation_form.after(1, lambda: reservation_form.focus_force())
+
         except:
-            if self.__chosen_language == "english":
-                messagebox.showerror("Something went wrong", f"We were unable to reserve a room for hotel {_hotel_name}.\nPlease enter valid values.")
-            else:
-                messagebox.showerror("Нещо се обърка", f"Не успяхме да резервираме стая за хотел {_hotel_name}.\nМоля, въведете валидни стойности.")
+            # If any invalid input data to show an error.
+            if _invalid_reserve_date == True and _invalid_input_flag == False:
+                if self.__chosen_language == "english":
+                    messagebox.showerror("Invalid date", f"We were unable to reserve a room for hotel {_hotel_name}.\nPlease enter a valid date.")
+                else:
+                    messagebox.showerror("Невалидна дата", f"Не успяхме да резервираме стая за хотел {_hotel_name}.\nМоля, въведете валидна дата.")
+
+            if _invalid_reserve_date == False and _invalid_input_flag == True:
+                if self.__chosen_language == "english":
+                    messagebox.showerror("Something went wrong", f"We were unable to reserve a room for hotel {_hotel_name}.\nPlease enter valid values.")
+                else:
+                    messagebox.showerror("Нещо се обърка", f"Не успяхме да резервираме стая за хотел {_hotel_name}.\nМоля, въведете валидни стойности.")
+
+            if _invalid_reserve_date == True and _invalid_input_flag == True:
+                if self.__chosen_language == "english":
+                    messagebox.showerror("Something went wrong", f"We were unable to reserve a room for hotel {_hotel_name}.\nPlease enter valid date and values.")
+                else:
+                    messagebox.showerror("Нещо се обърка", f"Не успяхме да резервираме стая за хотел {_hotel_name}.\nМоля, въведете валидни дата и стойности.")
 
             reservation_form.after(1, lambda: reservation_form.focus_force())
 
@@ -991,7 +1031,7 @@ class GUI():
         _review_dict["Food"] = _food_eval
 
         # Contains digit flag.
-        _contains_digit = False
+        _contains_digit_flag = False
 
         # Check if the entered values from the review form are valid.
         try:
@@ -1002,14 +1042,14 @@ class GUI():
                     else:
                         messagebox.showerror("Нещо се обърка", f"Не успяхме да въведем вашето мнение за хотел {_hotel_name}.\nМоля, опитайте отново.")
                     review_form.after(1, lambda: review_form.focus_force())
-                    _contains_digit = True
+                    _contains_digit_flag = True
                     break
 
             _name_entered = _name_entered.lower().title()
             _service_eval = int(_service_eval)
             _food_eval = int(_food_eval)
 
-            if _name_entered != "" and _contains_digit == False:
+            if _name_entered != "" and _contains_digit_flag == False:
                 review_form.destroy()
 
                 if (_feedback == "We want to know more for your experience with us.") or (_feedback == "Искаме да знаем повече за престоя Ви при нас.") or (_feedback == ""):
