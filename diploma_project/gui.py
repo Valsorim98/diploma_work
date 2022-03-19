@@ -1249,13 +1249,49 @@ class GUI():
         if self.__pets_var.get() == True:
             __searchdb_dict["Amenities"]["Allow Pets"] = True
 
-        if __price_input != "":
+        # If there is a given price input and its different from the defaults in the drop-down menu to check for valid input.
+        if (__price_input != "") and (__price_input != "Up to 30 BGN") and (__price_input != "31-50 BGN") and \
+            (__price_input != "51-70 BGN") and (__price_input != "71-100 BGN") and (__price_input != "More than 100 BGN") and \
+            (__price_input != "До 30 лева") and (__price_input != "31-50 лева") and (__price_input != "51-70 лева") and \
+            (__price_input != "71-100 лева") and (__price_input != "Над 100 лева"):
             try:
                 __price_input = int(__price_input)
                 __searchdb_dict["Price"] = __price_input
             except:
                 __searchdb_dict["Price"] = "error"
                 _show_error_flag = True
+
+        # Bypass the checks for letters in the price string input.
+        if __price_input == "Up to 30 BGN":
+            __searchdb_dict["Price"] = "Up to 30 BGN"
+
+        if __price_input == "До 30 лева":
+            __searchdb_dict["Price"] = "До 30 лева"
+        
+        if __price_input == "31-50 BGN":
+            __searchdb_dict["Price"] = "31-50 BGN"
+
+        if __price_input == "31-50 лева":
+            __searchdb_dict["Price"] = "31-50 лева"
+
+        if __price_input == "51-70 BGN":
+            __searchdb_dict["Price"] = "51-70 BGN"
+
+        if __price_input == "51-70 лева":
+            __searchdb_dict["Price"] = "51-70 лева"
+
+        if __price_input == "71-100 BGN":
+            __searchdb_dict["Price"] = "71-100 BGN"
+
+        if __price_input == "71-100 лева":
+            __searchdb_dict["Price"] = "71-100 лева"
+
+        if __price_input == "More than 100 BGN":
+            __searchdb_dict["Price"] = "More than 100 BGN"
+
+        if __price_input == "Над 100 лева":
+            __searchdb_dict["Price"] = "Над 100 лева"
+        # End region checks for letters.
 
         if _show_error_flag == True:
             if self.__chosen_language == "english":
