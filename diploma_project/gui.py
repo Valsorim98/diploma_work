@@ -23,6 +23,10 @@ class GUI():
     """Root window instance for main form.
     """
 
+    __root_results = None
+    """Root window instance for results form.
+    """
+
     __results_canvas = None
     """Canvas on results form.
     """
@@ -224,7 +228,11 @@ class GUI():
         self.__submit_review_command(city, hotel_name, _name_entry, _service_scale, _food_scale, _feedback, _root_review)
 
     def __on_mousewheel_results(self, event):
-        self.__results_canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+        """Method to scroll the results form on mouse scroll activation.
+        """
+
+        if tk.Toplevel.winfo_exists(self.__root_results):
+            self.__results_canvas.yview_scroll(int(-1*(event.delta/120)), "units")
 
     def __main_form(self):
         """Method to create the main GUI form.
@@ -321,31 +329,31 @@ class GUI():
 
         _found_hotels = found_hotels
 
-        _root_results = Toplevel(self.__root)
-        _root_results.title("Search results")
+        self.__root_results = Toplevel(self.__root)
+        self.__root_results.title("Search results")
 
         if self.__chosen_language != "english":
-            _root_results.title("Резултати от търсенето")
+            self.__root_results.title("Резултати от търсенето")
 
-        _root_results.resizable(False, False)
+        self.__root_results.resizable(False, False)
 
         _root_results_width = 750
         _root_results_height = 750
 
-        _screen_width = _root_results.winfo_screenwidth()
-        _screen_height = _root_results.winfo_screenheight()
+        _screen_width = self.__root_results.winfo_screenwidth()
+        _screen_height = self.__root_results.winfo_screenheight()
         _x_coordinate = int((_screen_width/2) - (_root_results_width/2))
         _y_coordinate = int((_screen_height/2) - (_root_results_height/2))
-        _root_results.geometry("{}x{}+{}+{}".format(_root_results_width, _root_results_height, _x_coordinate, _y_coordinate))
+        self.__root_results.geometry("{}x{}+{}+{}".format(_root_results_width, _root_results_height, _x_coordinate, _y_coordinate))
 
-        _root_results.configure(bg="#1C86EE")
+        self.__root_results.configure(bg="#1C86EE")
 
         # Create canvas over root.
-        self.__results_canvas = Canvas(_root_results, bg="#1C86EE", bd=0, highlightthickness=0, relief='ridge')
+        self.__results_canvas = Canvas(self.__root_results, bg="#1C86EE", bd=0, highlightthickness=0, relief='ridge')
         self.__results_canvas.pack(side=LEFT, expand=True, fill=BOTH)
 
         # Create the scrollbar on root.
-        _scrollbar = Scrollbar(_root_results, orient="vertical", command=self.__results_canvas.yview)
+        _scrollbar = Scrollbar(self.__root_results, orient="vertical", command=self.__results_canvas.yview)
         _scrollbar.pack(side=RIGHT, fill=Y)
 
         # Link the scrollbar to the canvas to make it active.
@@ -540,7 +548,7 @@ class GUI():
                 fg="black",
                 bg="white",
                 # Use partial to be able to pass the hotel name variable.
-                command=partial(self.__reserve_room_form, hotel_name=hotel["Hotel"], results_form=_root_results))
+                command=partial(self.__reserve_room_form, hotel_name=hotel["Hotel"], results_form=self.__root_results))
 
                 _reserve_btn.grid(row=row_counter, column=2, padx=(0,30), pady=50, sticky=NW)
 
@@ -552,7 +560,7 @@ class GUI():
                 height=2,
                 fg="black",
                 bg="white",
-                command=partial(self.__review_form, city=hotel["Town"], hotel_name=hotel["Hotel"], results_form=_root_results))
+                command=partial(self.__review_form, city=hotel["Town"], hotel_name=hotel["Hotel"], results_form=self.__root_results))
 
                 _review_btn.grid(row=row_counter, column=2, padx=(0,30), pady=(120,0), sticky=NW)
             else:
@@ -565,7 +573,7 @@ class GUI():
                 fg="black",
                 bg="white",
                 # Use partial to be able to pass the hotel name variable.
-                command=partial(self.__reserve_room_form, hotel_name=hotel["Hotel"], results_form=_root_results))
+                command=partial(self.__reserve_room_form, hotel_name=hotel["Hotel"], results_form=self.__root_results))
 
                 _reserve_btn.grid(row=row_counter, column=2, padx=(0,30), pady=50, sticky=NW)
 
@@ -577,14 +585,14 @@ class GUI():
                 height=2,
                 fg="black",
                 bg="white",
-                command=partial(self.__review_form, city=hotel["Town"], hotel_name=hotel["Hotel"], results_form=_root_results))
+                command=partial(self.__review_form, city=hotel["Town"], hotel_name=hotel["Hotel"], results_form=self.__root_results))
 
                 _review_btn.grid(row=row_counter, column=2, padx=(0,30), pady=(120,0), sticky=NW)
 
             row_counter += 1
 
         # Focus the newly created form.
-        _root_results.after(1, lambda: _root_results.focus_force())
+        self.__root_results.after(1, lambda: self.__root_results.focus_force())
 
     def __reserve_room_form(self, hotel_name, results_form):
         """Method to create the reserve room GUI form.
@@ -1267,7 +1275,7 @@ class GUI():
 
         if __price_input == "До 30 лева":
             __searchdb_dict["Price"] = "До 30 лева"
-        
+
         if __price_input == "31-50 BGN":
             __searchdb_dict["Price"] = "31-50 BGN"
 
