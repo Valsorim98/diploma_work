@@ -834,10 +834,10 @@ class GUI():
                             \nWe are expecting {_name_entered} on {_date}. Time of stay - {_days_of_stay} day.")
                 else:
                     if _days_of_stay > 1:
-                        messagebox.showinfo("Резервирана е стая", f"Благодарим Ви, че избрахте хотел {_hotel_name}.\
+                        messagebox.showinfo("Успешна резервация", f"Благодарим Ви, че избрахте хотел {_hotel_name}.\
                             \nОчакваме Ви, {_name_entered} на {_date}. Време за престой - {_days_of_stay} дена.")
                     if _days_of_stay == 1:
-                        messagebox.showinfo("Резервирана е стая", f"Благодарим Ви, че избрахте хотел {_hotel_name}.\
+                        messagebox.showinfo("Успешна резервация", f"Благодарим Ви, че избрахте хотел {_hotel_name}.\
                             \nОчакваме Ви, {_name_entered} на {_date}. Време за престой - {_days_of_stay} ден.")
 
             # If any invalid input data to show an error.
