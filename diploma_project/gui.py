@@ -1089,6 +1089,8 @@ class GUI():
 
                 if self.__chosen_language == "bulgarian":
                     if (_feedback != "Искаме да знаем повече за престоя Ви при нас."):
+                        _review_dict["Additional info"] = _feedback
+                        self.__database.insert_review(_review_dict)
                         messagebox.showinfo("Мнението Ви е изпратено", f"Благодарим Ви за вашето мнение за хотел {_hotel_name}.\
                                     \nОт {_name_entered} - оценка на услугите: {_service_eval}, оценка на храната: {_food_eval}, допълнителна информация: {_feedback}")
 
@@ -1317,9 +1319,6 @@ class GUI():
                 messagebox.showerror("Something went wrong", "Please enter valid values.")
             else:
                 messagebox.showerror("Нещо се обърка", "Моля, въведете валидни стойности.")
-
-        # for testing
-        print(f"Searchdb dict: {__searchdb_dict}")
 
         return __searchdb_dict
 

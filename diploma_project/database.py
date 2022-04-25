@@ -71,16 +71,16 @@ class Database():
         # Dict for found hotels.
         _found_hotels = {}
 
-        # Prints all hotels in the town from user preferences.
+        # Returns all hotels in the town from user preferences.
         for hotel in _read_collection:
 
             # Flag to stop searching after first attempt if wrong input is given.
-            stop_searching = False
+            _stop_searching = False
 
             # Create dict with the given preferences to search in the database.
             __searchdb = {}
 
-            # If the user didn't specify any preferences print all hotels.
+            # If the user didn't specify any preferences return all hotels.
             if (self.__user_preferences["Name"] == 0 and
                 self.__user_preferences["Town"] == 0 and
                 self.__user_preferences["Star Rating"] == 0 and
@@ -91,7 +91,6 @@ class Database():
                 self.__user_preferences["Amenities"]["Allow Pets"] == 0 and
                 self.__user_preferences["Price"] == 0):
 
-                print(hotel)
                 _num_hotels_found += 1
                 _found_hotels.update({_num_hotels_found:hotel})
 
@@ -196,7 +195,7 @@ class Database():
                                 _suitable_hotel = False
                         except:
                             # Stop searching if wrong price input is given.
-                            stop_searching = True
+                            _stop_searching = True
                             break
 
                 else:
@@ -204,26 +203,18 @@ class Database():
                     break
 
             # Stop searching if wrong input is given.
-            if stop_searching == True:
+            if _stop_searching == True:
                 break
 
-            # Print only the hotels that coincide with all the user preferences and append them to found_hotels dict.
+            # Return only the hotels that coincide with all the user preferences and append them to found_hotels dict.
             if _suitable_hotel == True:
-                print(hotel)
                 _num_hotels_found += 1
                 _found_hotels.update({_num_hotels_found:hotel})
-
-        # For testing.
-        print(f"\nSearch with: {__searchdb}")
-        print(f"{_num_hotels_found} hotels found.")
 
         # Delete every _id key from the dict.
         for hotel in _found_hotels.values():
             if "_id" in hotel.keys():
                 hotel.pop("_id")
-
-        # for testing
-        print(f"\nFound hotels: {_found_hotels}")
 
         # Make _found_hotels dict as a class attribute to be able to get it outside of the class.
         self.found_hotels = _found_hotels
