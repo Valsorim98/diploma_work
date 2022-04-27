@@ -166,8 +166,10 @@ class GUI():
         self.__main_label.config(text="Looking for a hotel?\nYou are at the right place!")
         self.__name_label.config(text="Name:")
         self.__city_label.config(text="City:")
-        self.__city_combobox['values'] = ['Burgas', 'Dobrich', 'Lovech', 'Montana', 'Pleven', 'Plovdiv', 'Razgrad', 'Ruse',
-                                            'Shumen', 'Silistra', 'Sliven', 'Sofia', 'Stara Zagora', 'Svishtov', 'Targovishte', 'Varna', 'Veliko Turnovo', 'Vraca']
+        self.__city_combobox['values'] = ['Burgas', 'Dobrich', 'Lovech', 'Montana', 'Pleven',
+                                            'Plovdiv', 'Razgrad', 'Ruse', 'Shumen', 'Silistra',
+                                            'Sliven', 'Sofia', 'Stara Zagora', 'Svishtov',
+                                            'Targovishte', 'Varna', 'Veliko Turnovo', 'Vraca']
         self.__stars_label.config(text="Stars:")
         self.__amenities_label.config(text="Amenities:")
         self.__price_label.config(text="Price up to:")
@@ -192,7 +194,8 @@ class GUI():
         self.__main_label.config(text="Търсите хотел?\nВие сте на правилното място!")
         self.__name_label.config(text="           Име:")
         self.__city_label.config(text="Град:")
-        self.__city_combobox['values'] = ['Бургас', 'Варна', 'Велико Търново', 'Враца', 'Добрич', 'Ловеч', 'Монтана', 'Плевен', 'Пловдив', 'Разград', 'Русе',
+        self.__city_combobox['values'] = ['Бургас', 'Варна', 'Велико Търново', 'Враца', 'Добрич',
+                                            'Ловеч', 'Монтана', 'Плевен', 'Пловдив', 'Разград', 'Русе',
                                             'Свищов', 'Силистра', 'Сливен', 'София', 'Стара Загора', 'Търговище', 'Шумен']
         self.__stars_label.config(text="Звезди:")
         self.__amenities_label.config(text="Удобства:")
@@ -282,7 +285,8 @@ class GUI():
         # Create the comboboxes in the main form.
         self.__city_combobox = Combobox(self.__root, width=25)
         self.__city_combobox['values'] = ['Burgas', 'Dobrich', 'Lovech', 'Montana', 'Pleven', 'Plovdiv', 'Razgrad', 'Ruse',
-                                            'Shumen', 'Silistra', 'Sliven', 'Sofia', 'Stara Zagora', 'Svishtov', 'Targovishte', 'Varna', 'Veliko Turnovo', 'Vraca']
+                                            'Shumen', 'Silistra', 'Sliven', 'Sofia', 'Stara Zagora', 'Svishtov',
+                                            'Targovishte', 'Varna', 'Veliko Turnovo', 'Vraca']
 
         self.__stars_combobox = Combobox(self.__root, width=25)
         self.__stars_combobox['values'] = [1, 2, 3, 4, 5]
@@ -695,8 +699,8 @@ class GUI():
                 height=2,
                 fg="black",
                 bg="white",
-                command=partial(self.__reserve_room_command, calendar=_cal, hotel_name=hotel_name, name_entry=_name_entry, room_capacity=_room_cap_combobox,
-                                days_entered=_days_combobox, reservation_form=_root_reservation))
+                command=partial(self.__reserve_room_command, calendar=_cal, hotel_name=hotel_name, name_entry=_name_entry,
+                                room_capacity=_room_cap_combobox, days_entered=_days_combobox, reservation_form=_root_reservation))
         else:
             _reserve_btn = Button(
                 _root_reservation,
@@ -706,14 +710,14 @@ class GUI():
                 height=2,
                 fg="black",
                 bg="white",
-                command=partial(self.__reserve_room_command, calendar=_cal, hotel_name=hotel_name, name_entry=_name_entry, room_capacity=_room_cap_combobox,
-                                days_entered=_days_combobox, reservation_form=_root_reservation))
+                command=partial(self.__reserve_room_command, calendar=_cal, hotel_name=hotel_name, name_entry=_name_entry,
+                                room_capacity=_room_cap_combobox, days_entered=_days_combobox, reservation_form=_root_reservation))
 
         _reserve_btn.grid(row=5, column=1, pady=(25,0))
 
         # On 'Return' button click to click the 'Reserve' button on reservation form.
         _root_reservation.bind("<Return>", lambda reserve: self.__onreturn_reserve(_cal, hotel_name, _name_entry, _room_cap_combobox,
-                            _days_combobox, _root_reservation))
+                                _days_combobox, _root_reservation))
 
     def __reserve_room_command(self, calendar, hotel_name, name_entry, room_capacity, days_entered, reservation_form):
         """Method to reserve a room.
@@ -984,8 +988,8 @@ class GUI():
                 height=2,
                 fg="black",
                 bg="white",
-                command=partial(self.__submit_review_command, city=city, hotel_name=hotel_name, name_entry=_name_entry, service_scale=_service_scale,
-                                food_scale=_food_scale, feedback=_feedback, review_form=_root_review))
+                command=partial(self.__submit_review_command, city=city, hotel_name=hotel_name, name_entry=_name_entry,
+                                service_scale=_service_scale, food_scale=_food_scale, feedback=_feedback, review_form=_root_review))
         else:
             _submit_button = Button(_root_review,
                 text="Изпращане",
@@ -994,8 +998,8 @@ class GUI():
                 height=2,
                 fg="black",
                 bg="white",
-                command=partial(self.__submit_review_command, city=city, hotel_name=hotel_name, name_entry=_name_entry, service_scale=_service_scale,
-                                food_scale=_food_scale, feedback=_feedback, review_form=_root_review))
+                command=partial(self.__submit_review_command, city=city, hotel_name=hotel_name, name_entry=_name_entry,
+                                service_scale=_service_scale, food_scale=_food_scale, feedback=_feedback, review_form=_root_review))
 
         _submit_button.grid(row=5, column=1)
 
